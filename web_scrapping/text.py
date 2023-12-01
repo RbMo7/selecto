@@ -26,14 +26,14 @@ except:
 
 next_page = ''
 driver.implicitly_wait(5)
-keyword = "apple iphone 15 pro"
+keyword = "mac m1 apple"
 search = driver.find_element(By.ID, 'twotabsearchtextbox')
 search.send_keys(keyword)
 # click search button
 search_button = driver.find_element(By.ID, 'nav-search-submit-button')
 search_button.click()
 reviews = []
-driver.implicitly_wait(50000)
+driver.implicitly_wait(5)
 
 items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
 for item in items:
