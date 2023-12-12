@@ -43,6 +43,7 @@ def get_reviews_amazon(keyword):
     items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
         # find ASIN number 
+        title = item.find_element(By.XPATH,'.//span[@class="a-size-medium a-color-base a-text-normal"]')
         data_asin = item.get_attribute("data-asin")
         product_asin = data_asin
         break
@@ -62,7 +63,7 @@ def get_reviews_amazon(keyword):
             if temp > 20:
                 print("temp executed inner loop")
                 break
-            insert ={"Review":review.text}
+            insert ={"Product Name": title.text,"Review":review.text}
             print("No of reveiws:", temp)
             collection_name.insert_one(insert)
             reviews.append(review.text)
