@@ -1,13 +1,34 @@
-import React from "react";
-import { Modal} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
 import ProductCard from "./Card"; // Update the import path based on your project structure
+import axios from "axios";
 
-function ProductListModal({ products, show, onHide }) {
-  const searchText = products.length > 0 ? products[0].searchText : "";
+function ProductListModal({ productData, show, onHide }) {
+  const [products, setProducts] = useState([]);
+  const searchText = productData.length > 0 ? productData[0].searchText : "";
+  const collectionName = searchText; 
+
+  // Use useEffect to fetch data when the component mounts
+  useEffect(() => {
+    // Define the API endpoint URL
+    const apiUrl = "http://127.0.0.1:8000/products/api/get_products/";
+
+    // Make a GET request to fetch data from the Django backend
+    axios
+      .get(`${apiUrl}${collectionName}/`)
+      .then((response) => {
+        // Update the state with the fetched products
+        setProducts(response.data.products);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [collectionName]); // Include 'collectionName' in the dependency array to re-run the effect when the collectionName changes
+
   return (
     <Modal show={show} onHide={onHide} size="lg">
       <Modal.Header closeButton>
-      <Modal.Title>Product List for "{searchText}"</Modal.Title>
+        <Modal.Title>Product List for "{searchText}"</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>
@@ -17,7 +38,7 @@ function ProductListModal({ products, show, onHide }) {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        {/* footer of modal if needed */}
+        {/* Footer of modal if needed */}
       </Modal.Footer>
     </Modal>
   );

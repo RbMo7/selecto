@@ -55,7 +55,7 @@ def get_reviews_amazon(keyword):
         break
     web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
     print(title.text)
-    title = {"Product Name": title.text}
+    title = {"name": title.text}
     collection_name.insert_one(title)
     print(web)
     driver.get(web)

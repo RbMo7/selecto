@@ -9,7 +9,7 @@ function Landing(props) {
   const [searchText, setSearchText] = useState("");
 
   const [showProductListModal, setShowProductListModal] = useState(false);
-  const products = [{searchText}];
+  const productData = [{searchText}];
 
   const handleShowProductListModal = () => {
     setShowProductListModal(true);
@@ -85,7 +85,7 @@ function Landing(props) {
         </Col>
       </Row>
       <ProductListModal
-        products={products}
+        productData={productData}
         show={showProductListModal}
         onHide={handleHideProductListModal}
       />
