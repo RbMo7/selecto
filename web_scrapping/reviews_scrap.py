@@ -47,8 +47,10 @@ def get_reviews_amazon(keyword):
         data_asin = item.get_attribute("data-asin")
         product_asin = data_asin
         break
-    print(product_asin)
     web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
+    print(title.text)
+    title={"Product Name": title.text}
+    collection_name.insert_one(title)
     print(web)
     driver.get(web)
     driver.implicitly_wait(5)
@@ -63,7 +65,7 @@ def get_reviews_amazon(keyword):
             if temp > 20:
                 print("temp executed inner loop")
                 break
-            insert ={"Product Name": title.text,"Review":review.text}
+            insert ={"Review":review.text}
             print("No of reveiws:", temp)
             collection_name.insert_one(insert)
             reviews.append(review.text)
