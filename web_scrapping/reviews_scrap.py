@@ -11,7 +11,10 @@ dbase = get_database()
 web = 'https://www.amazon.com'
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
+##captcha solver
 
+
+##end captcha solver
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 driver.get(web)
 next_page = ''

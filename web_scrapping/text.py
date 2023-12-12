@@ -13,7 +13,7 @@ driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())
 driver.get(web)
 next_page = ''
 driver.implicitly_wait(5)
-keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
+keyword = "macbook air m1"
 search = driver.find_element(By.ID, 'twotabsearchtextbox')
 search.send_keys(keyword)
 # click search button
