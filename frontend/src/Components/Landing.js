@@ -28,7 +28,7 @@ function Landing(props) {
       // Show an error message or prevent the request
       console.error("Search text is empty");
       toast.error("Search text is empty");
-
+      setShowProductListModal(false);
       return;
     }
 

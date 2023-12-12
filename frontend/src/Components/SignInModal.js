@@ -4,7 +4,6 @@ import { Modal, Button, Form, Image } from "react-bootstrap";
 import selectoLogo from "./Images/Logo-NObg.png";
 import RegisterModal from "./RegisterModal";
 
-
 function SignInModal(props) {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 

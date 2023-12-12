@@ -79,21 +79,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-
 
 # MongoDB URI
 MONGO_URI = "mongodb+srv://RbMo:tCap11fDEdXi68PW@reviews-list.q56a6p2.mongodb.net/?retryWrites=true&w=majority"
 
-# Create a new client and connect to the server
-try:
-    client = MongoClient(MONGO_URI, server_api=ServerApi('1'))
-    # Send a ping to confirm a successful connection
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
 
 # Django database configuration
 DATABASES = {
