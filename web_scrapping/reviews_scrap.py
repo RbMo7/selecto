@@ -7,9 +7,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from amazoncaptcha import AmazonCaptcha
 from database import get_database
 
-dbase = get_database()
 
 def get_reviews_amazon(keyword):
+    dbase = get_database()
     web = 'https://www.amazon.com'
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
