@@ -1,6 +1,6 @@
 // RegisterModal.js
 import React from "react";
-import { Modal, Button, Form, Image, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Image, Col } from "react-bootstrap";
 import selectoLogo from "./Images/Logo-NObg.png";
 import SignInModal from "./SignInModal";
 
@@ -34,15 +34,14 @@ function RegisterModal(props) {
           className="mb-3"
         />
         <Form>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridName">
-              <Form.Control type="text" placeholder="Enter your name" />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridEmail">
-              <Form.Control type="email" placeholder="Enter your email" />
-            </Form.Group>
-          </Row>
+          <Form.Group as={Col} controlId="formGridName">
+            <Form.Control type="text" placeholder="Enter your name" />
+          </Form.Group>
+          <br />
+          <Form.Group as={Col} controlId="formGridEmail">
+            <Form.Control type="email" placeholder="Enter your email" />
+          </Form.Group>
+          <br />
 
           <Form.Group className="mb-3" controlId="formGridPassword">
             <Form.Control type="password" placeholder="Create a password" />

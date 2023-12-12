@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -78,10 +79,31 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+
+# MongoDB URI
+MONGO_URI = "mongodb+srv://RbMo:tCap11fDEdXi68PW@reviews-list.q56a6p2.mongodb.net/?retryWrites=true&w=majority"
+
+# Create a new client and connect to the server
+try:
+    client = MongoClient(MONGO_URI, server_api=ServerApi('1'))
+    # Send a ping to confirm a successful connection
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
+# Django database configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'Selecto',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': MONGO_URI
+        }
     }
 }
 
@@ -123,8 +145,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 CORS_ALLOWED_ORIGINS = [
+    "http://192.168.101.16:3000",
     "http://localhost:3000",
+    "http://localhost:3001",
 ]
+
+CSRF_COOKIE_SECURE = True  # or False if not using HTTPS in development
+CSRF_COOKIE_SAMESITE = 'Lax'  # or 'Strict' based on your requirements
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

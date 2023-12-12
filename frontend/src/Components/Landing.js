@@ -2,20 +2,45 @@ import React, { useState } from "react";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import logo from "./Images/Logo-NObg-NOtxt.png";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import ProductListModal from "./Products";
 
 function Landing(props) {
   const [searchText, setSearchText] = useState("");
 
+  const [showProductListModal, setShowProductListModal] = useState(false);
+  const products = [{searchText}];
+
+  const handleShowProductListModal = () => {
+    setShowProductListModal(true);
+  };
+
+  const handleHideProductListModal = () => {
+    setShowProductListModal(false);
+  };
+
   const handleSearch = async (e) => {
     e.preventDefault();
+    
+
+    // Input validation
+    if (!searchText.trim()) {
+      // Show an error message or prevent the request
+      console.error("Search text is empty");
+      toast.error("Search text is empty");
+
+      return;
+    }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/products/api/search_and_scrape/", {
-        searchText,
-      });
+      const response = await axios.post(
+        "http://localhost:8000/products/api/search_and_scrape/",
+        { searchText }
+      );
       console.log(response.data);
     } catch (error) {
       console.error("Error sending search request:", error);
+      toast.error("An error occurred while fetching products");
     }
   };
 
@@ -34,7 +59,11 @@ function Landing(props) {
           onChange={(e) => setSearchText(e.target.value)}
         />
         <br />
-        <Button variant="dark" type="submit" className="ml-2">
+        <Button
+          variant="primary"
+          type="Submit"
+          onClick={handleShowProductListModal}
+        >
           Search
         </Button>
       </Form>
@@ -55,6 +84,11 @@ function Landing(props) {
           </p>
         </Col>
       </Row>
+      <ProductListModal
+        products={products}
+        show={showProductListModal}
+        onHide={handleHideProductListModal}
+      />
     </Container>
   );
 }
