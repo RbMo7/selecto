@@ -56,7 +56,10 @@ def get_reviews_amazon(keyword):
     items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
         # find ASIN number 
-        title = item.find_element(By.XPATH,'.//span[@class="a-size-medium a-color-base a-text-normal"]')
+        try:
+            title = item.find_element(By.XPATH,'.//span[@class="a-size-medium a-color-base a-text-normal"]')
+        except:
+            title = item.find_element(By.XPATH,'.//span[@class="a-size-base-plus a-color-base a-text-normal"]')
         img_link = item.find_element(By.XPATH,'.//img[@class="s-image"]').get_attribute('src')
         data_asin = item.get_attribute("data-asin")
         product_asin = data_asin
@@ -139,7 +142,4 @@ def get_reviews_amazon(keyword):
     driver.quit()
     print(reviews)
 
-if get_reviews_amazon("steelseries new artics nova 3") == 0:
-    print("reviews already collected")
-else:
-    print("reviews collected")
+print("the result is", get_reviews_amazon("marker"))
