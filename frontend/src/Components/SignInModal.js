@@ -3,9 +3,44 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Image } from "react-bootstrap";
 import selectoLogo from "./Images/Logo-NObg.png";
 import RegisterModal from "./RegisterModal";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 function SignInModal(props) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
+    const userData = { email, password };
+    // Input validation
+    if (!email || !password) {
+      // Show an error message or prevent the request
+      console.error("Empty Fields");
+      toast.error("Don't leave empty fields");
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/selecto/api/signin/",
+        { userData }
+      );
+
+      if (!data.error) {
+        toast.success("SignIn successfully");
+        //redirecting user to userdashboard
+      } else {
+        toast.error(data.error);
+      }
+    } catch (error) {
+      console.error("Error sending search request:", error);
+      toast.error("An error occurred ", error);
+    }
+  };
 
   const handleRegisterModalShow = () => {
     setShowRegisterModal(true);
@@ -33,15 +68,26 @@ function SignInModal(props) {
           height="200"
           className="mb-3"
         />
-        <Form>
+        <Form onSubmit={handleSignIn}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Control type="email" placeholder="Enter your email" />
+            <Form.Control
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              type="email"
+              placeholder="Enter your email"
+            />
           </Form.Group>
 
           <br />
 
           <Form.Group controlId="formBasicPassword">
-            <Form.Control type="password" placeholder="Enter your password" />
+            <Form.Control
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              type="password"
+              placeholder="Enter your password"
+            />
+
           </Form.Group>
           <br />
           <Button variant="primary" type="submit" block>

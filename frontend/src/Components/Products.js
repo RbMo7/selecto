@@ -11,7 +11,7 @@ function ProductListModal({ productData, show, onHide }) {
   // Using useEffect to fetch data when the component mounts
   useEffect(() => {
     // Define the API endpoint URL
-    const apiUrl = "http://127.0.0.1:8000/products/api/get_products/";
+    const apiUrl = "http://127.0.0.1:8000/selecto/api/get_products/";
 
     // Makaing a GET request to fetch data from the Django backend
     axios
