@@ -7,9 +7,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from amazoncaptcha import AmazonCaptcha
 from database import get_database
 
-dbase = get_database()
 
 def get_reviews_amazon(keyword):
+    dbase = get_database()
     web = 'https://www.amazon.com'
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
@@ -43,11 +43,14 @@ def get_reviews_amazon(keyword):
     items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
         # find ASIN number 
+        title = item.find_element(By.XPATH,'.//span[@class="a-size-medium a-color-base a-text-normal"]')
         data_asin = item.get_attribute("data-asin")
         product_asin = data_asin
         break
-    print(product_asin)
     web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
+    print(title.text)
+    title={"Product Name": title.text}
+    collection_name.insert_one(title)
     print(web)
     driver.get(web)
     driver.implicitly_wait(5)
