@@ -104,7 +104,7 @@ def get_reviews_amazon(keyword):
         button.click()
     except:
         print("No captcha found")
-    driver.get_screenshot_as_file("screenshot.png")
+    # driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
     count=1
     temp = 0
