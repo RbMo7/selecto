@@ -7,6 +7,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from amazoncaptcha import AmazonCaptcha
 from database import get_database
 from pymongo import MongoClient
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+
 
 def get_reviews_amazon(keyword):
     dbase = get_database()
@@ -14,7 +17,21 @@ def get_reviews_amazon(keyword):
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     ##captcha solver
+    chrome_options = Options()
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument('--allow-running-insecure-content')
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
+    options.add_argument(f'user-agent={user_agent}')
+    # chrome_options.add_argument('--disable-dev-shm-usage')
 
+    
+
+    ##end captcha solver
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+    driver.get(web)
     try:
         img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
         captcha = AmazonCaptcha.fromlink(img_div)
@@ -24,10 +41,6 @@ def get_reviews_amazon(keyword):
         button.click()
     except:
         print("No captcha found")
-
-    ##end captcha solver
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-    driver.get(web)
     next_page = ''
     driver.implicitly_wait(5)
     # keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
@@ -57,8 +70,16 @@ def get_reviews_amazon(keyword):
         print("Collection exists")
         collection = dbase[title.text]
         cursor = collection.find({})
-        for document in cursor:
-            reviews.append(cursor[document]["Review"])
+        for doc in cursor:
+            reviews.append(doc)
+        while True:
+            try:
+                # print(reviews_arr[i]['Review'])
+                overall = overall + reviews[i]['Review']
+                i = i + 1
+            except:
+                break
+        reviews = overall
         print(reviews)
         return 0
     else:
@@ -69,14 +90,24 @@ def get_reviews_amazon(keyword):
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
     title={"Product Name": title.text, "Product-img": img_link}
-    collection_name.insert_one(title)
     print(web)
     driver.get(web)
+    try:
+        img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
+        captcha = AmazonCaptcha.fromlink(img_div)
+        captcha_value = AmazonCaptcha.solve(captcha)
+        input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
+        button = driver.find_element(By.CLASS_NAME, "a-button-text")
+        button.click()
+    except:
+        print("No captcha found")
+    driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
     count=1
     temp = 0
     insert = {}
     try:
+        collection_name.insert_one(title)
         while True:
             items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "a-row a-spacing-small review-data")]')))
             for item in items:
@@ -108,7 +139,7 @@ def get_reviews_amazon(keyword):
     driver.quit()
     print(reviews)
 
-if get_reviews_amazon("Portable monitor asus") == 0:
+if get_reviews_amazon("steelseries new artics nova 3") == 0:
     print("reviews already collected")
 else:
     print("reviews collected")
