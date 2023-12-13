@@ -63,7 +63,7 @@ def get_reviews_amazon(keyword):
     reviews = []
     driver.implicitly_wait(5)
 
-    items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
+    items = wait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
         # find ASIN number 
         try:
