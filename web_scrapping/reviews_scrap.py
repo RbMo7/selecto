@@ -141,9 +141,10 @@ def get_reviews_amazon(keyword):
             driver.implicitly_wait(2)
     except:
         print("No reviews found")
+        return 0
     driver.quit()
     print(reviews)
     end = time.time()
     print("Total time is: ", end - start)
 
-print("the result is", get_reviews_amazon("marker"))
+print("the result is", "NO REVIEW FOUND" if get_reviews_amazon("Johnnie walker red label") else "Reviews Listed")
