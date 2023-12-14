@@ -4,16 +4,29 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
+from amazoncaptcha import AmazonCaptcha
 
 web = 'https://www.amazon.com'
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 
+
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 driver.get(web)
+
+try:
+    img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
+    captcha = AmazonCaptcha.fromlink(img_div)
+    captcha_value = AmazonCaptcha.solve(captcha)
+    input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
+    button = driver.find_element(By.CLASS_NAME, "a-button-text")
+    button.click()
+except:
+    print("No captcha found")
+
 next_page = ''
 driver.implicitly_wait(5)
-keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
+keyword = "mac m1 apple"
 search = driver.find_element(By.ID, 'twotabsearchtextbox')
 search.send_keys(keyword)
 # click search button
