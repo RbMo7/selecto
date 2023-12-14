@@ -34,10 +34,18 @@ function BasicNavbar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link href="#" onClick={() => handleModalShow("signIn")}>
+              <Nav.Link
+                href="#"
+                onClick={() => handleModalShow("signIn")}
+                aria-label="Sign In"
+              >
                 Sign In
               </Nav.Link>
-              <Nav.Link href="#" onClick={() => handleModalShow("register")}>
+              <Nav.Link
+                href="#"
+                onClick={() => handleModalShow("register")}
+                aria-label="Register"
+              >
                 Register
               </Nav.Link>
             </Nav>

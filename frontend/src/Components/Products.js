@@ -6,7 +6,7 @@ import axios from "axios";
 function ProductListModal({ productData, show, onHide }) {
   const [products, setProducts] = useState([]);
   const searchText = productData.length > 0 ? productData[0].searchText : "";
-  const collectionName = searchText; 
+  const collectionName = searchText;
 
   // Using useEffect to fetch data when the component mounts
   useEffect(() => {
@@ -23,7 +23,7 @@ function ProductListModal({ productData, show, onHide }) {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [collectionName]); 
+  }, [collectionName]);
 
   return (
     <Modal show={show} onHide={onHide} size="lg">
@@ -37,9 +37,7 @@ function ProductListModal({ productData, show, onHide }) {
           ))}
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        {/* Footer of modal if needed */}
-      </Modal.Footer>
+      <Modal.Footer>{/* Footer of modal if needed */}</Modal.Footer>
     </Modal>
   );
 }

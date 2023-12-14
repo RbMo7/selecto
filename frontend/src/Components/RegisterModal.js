@@ -5,7 +5,6 @@ import selectoLogo from "./Images/Logo-NObg.png";
 import SignInModal from "./SignInModal";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { FiEye } from "react-icons/fi";
 
 function RegisterModal(props) {
   const [name, setName] = useState("");
