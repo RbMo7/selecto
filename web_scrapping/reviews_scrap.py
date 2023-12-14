@@ -81,20 +81,20 @@ def get_reviews_amazon(keyword):
     # print(list_of_collections)
     if title.text in list_of_collections:
         print("Collection exists")
-        collection = dbase[title.text]
-        cursor = collection.find({})
-        for doc in cursor:
-            reviews.append(doc)
-        while True:
-            try:
-                # print(reviews_arr[i]['Review'])
-                overall = overall + reviews[i]['Review']
-                i = i + 1
-            except:
-                break
-        reviews = overall
-        print(reviews)
-        return 0
+        # collection = dbase[title.text]
+        # cursor = collection.find({})
+        # for doc in cursor:
+        #     reviews.append(doc)
+        # while True:
+        #     try:
+        #         # print(reviews_arr[i]['Review'])
+        #         overall = overall + reviews[i]['Review']
+        #         i = i + 1
+        #     except:
+        #         break
+        # reviews = overall
+        # print(reviews)
+        return title.text
     else:
         print("Collection dose not exists")
     # try:
@@ -102,11 +102,12 @@ def get_reviews_amazon(keyword):
     # except pymongo.errors.OperationFailure:  # If the collection doesn't exist
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
+    value = title.text
     title={"Product Name": title.text, "Product-img": img_link}
     print(web)
     driver.get(web)
     captchaSolver()
-    # driver.get_screenshot_as_file("screenshot.png")
+    driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
     count=1
     temp = 0
@@ -141,9 +142,11 @@ def get_reviews_amazon(keyword):
             driver.implicitly_wait(2)
     except:
         print("No reviews found")
+        return 0
     driver.quit()
     print(reviews)
     end = time.time()
     print("Total time is: ", end - start)
+    return value
 
-print("the result is", get_reviews_amazon("marker"))
+print(get_reviews_amazon("thinkpad lenevo"))
