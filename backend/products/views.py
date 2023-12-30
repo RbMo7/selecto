@@ -37,6 +37,7 @@ def get_products(request, collection_name):
 
         # Fetch products from the specified collection
         products = list(collection.find())
+        print('hehehaha')
 
         # Serialize the data and return the response
         serializer = ProductSerializer(products, many=True)

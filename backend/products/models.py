@@ -2,8 +2,8 @@
 from django.db import models
 
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    image_url = models.URLField()
+    Product_Name = models.CharField(max_length=255)
+    Product_img = models.URLField()
 
     def __str__(self):
         return self.name

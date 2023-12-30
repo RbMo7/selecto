@@ -144,9 +144,8 @@ def get_reviews_amazon(keyword):
         print("No reviews found")
         return 0
     driver.quit()
-    print(reviews)
+    print("Reviews scraping done")
     end = time.time()
     print("Total time is: ", end - start)
     return value
 
-print(get_reviews_amazon("thinkpad lenevo"))

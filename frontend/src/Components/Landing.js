@@ -33,7 +33,7 @@ function Landing(props) {
     }
 
     try {
-      const response = await axios.post(
+      const {response} = await axios.post(
         "http://localhost:8000/selecto/api/search_and_scrape/",
         { searchText }
       );
