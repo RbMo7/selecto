@@ -1,6 +1,6 @@
 # views.py
 from django.http import JsonResponse
-from .reviews_scrap import after_func
+from .scrap_thread import scrap
 import json
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -22,8 +22,12 @@ def search_and_scrape(request):
         search_text = data.get('searchText')
         try:
             # Scrape reviews using the utility function
-            reviews = after_func(search_text)
-            print (reviews)
+            reviews = scrap(search_text)
+
+            print ("views ma : " ,reviews)
+
+            return JsonResponse({'Title': reviews})
+
 
         except Exception as error:
             print("Error:", error)
