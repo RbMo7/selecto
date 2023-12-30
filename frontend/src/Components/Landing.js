@@ -4,8 +4,15 @@ import logo from "./Images/Logo-NObg-NOtxt.png";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ProductListModal from "./Products";
+<<<<<<< HEAD
+=======
+import Loading from "./Loading";
+
+>>>>>>> e229e173c9aff4700d572e0f23a850a2ae7b786e
 function Landing(props) {
   const [searchText, setSearchText] = useState("");
+
+  const [loading, setLoading] = useState(true);
 
   const [showProductListModal, setShowProductListModal] = useState(false);
   const productData = [{searchText}];
@@ -32,7 +39,7 @@ function Landing(props) {
     }
 
     try {
-      const response = await axios.post(
+      const {response} = await axios.post(
         "http://localhost:8000/selecto/api/search_and_scrape/",
         { searchText }
       );

@@ -5,14 +5,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 from amazoncaptcha import AmazonCaptcha
-from database import get_database
+from .database import get_database
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
 
+continue_exe = False
+driver = None
+dbase = None
+start = None
+def initialize_driver():
 
-
-def get_reviews_amazon(keyword):
+    global driver
+    global dbase
+    global start
     start = time.time()
     dbase = get_database()
     web = 'https://www.amazon.com'
@@ -36,32 +42,50 @@ def get_reviews_amazon(keyword):
     options.add_argument(f'user-agent={user_agent}')
     # chrome_options.add_argument('--disable-dev-shm-usage')
 
-    def captchaSolver():
-        try:
-            img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
-            captcha = AmazonCaptcha.fromlink(img_div)
-            captcha_value = AmazonCaptcha.solve(captcha)
-            input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
-            button = driver.find_element(By.CLASS_NAME, "a-button-text")
-            button.click()
-        except:
-            print("No captcha found")
+    
 
     ##end captcha solver
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
     driver.get(web)
     captchaSolver()
+    
+
+def captchaSolver():
+    global driver
+    try:
+        img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
+        captcha = AmazonCaptcha.fromlink(img_div)
+        captcha_value = AmazonCaptcha.solve(captcha)
+        input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
+        button = driver.find_element(By.CLASS_NAME, "a-button-text")
+        button.click()
+    except:
+        print("No captcha found")
+
+def get_reviews_amazon():
+    global start_pro
+    global continue_exe
+    global next_page
+    initialize_driver()
     next_page = ''
     driver.implicitly_wait(2)
     # keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
     # collection_name = dbase[keyword]
-    search = driver.find_element(By.ID, 'twotabsearchtextbox')
-    search.send_keys(keyword)
+    print("waiting for keyword")
+    end = time.time()
+    print("time:", end-start)
+
+
+def after_func(keyword):
+    global next_page
+    global driver
+    global start
+    driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
     # click search button
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
     reviews = []
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(1)
 
     items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
@@ -81,20 +105,20 @@ def get_reviews_amazon(keyword):
     # print(list_of_collections)
     if title.text in list_of_collections:
         print("Collection exists")
-        collection = dbase[title.text]
-        cursor = collection.find({})
-        for doc in cursor:
-            reviews.append(doc)
-        while True:
-            try:
-                # print(reviews_arr[i]['Review'])
-                overall = overall + reviews[i]['Review']
-                i = i + 1
-            except:
-                break
-        reviews = overall
-        print(reviews)
-        return 0
+        # collection = dbase[title.text]
+        # cursor = collection.find({})
+        # for doc in cursor:
+        #     reviews.append(doc)
+        # while True:
+        #     try:
+        #         # print(reviews_arr[i]['Review'])
+        #         overall = overall + reviews[i]['Review']
+        #         i = i + 1
+        #     except:
+        #         break
+        # reviews = overall
+        # print(reviews)
+        return title.text
     else:
         print("Collection dose not exists")
     # try:
@@ -102,11 +126,12 @@ def get_reviews_amazon(keyword):
     # except pymongo.errors.OperationFailure:  # If the collection doesn't exist
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
-    title={"Product Name": title.text, "Product-img": img_link}
+    value = title.text
+    title={"product_name": title.text, "product_img": img_link}
     print(web)
     driver.get(web)
     captchaSolver()
-    # driver.get_screenshot_as_file("screenshot.png")
+    driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
     count=1
     temp = 0
@@ -141,9 +166,14 @@ def get_reviews_amazon(keyword):
             driver.implicitly_wait(2)
     except:
         print("No reviews found")
+        return 0
     driver.quit()
-    print(reviews)
+    print("Reviews scraping done")
     end = time.time()
     print("Total time is: ", end - start)
+    return value
 
-print("the result is", get_reviews_amazon("marker"))
+
+# get_reviews_amazon()
+# after_func("lenevo thinkpad")
+# print(get_reviews_amazon("Forza Motorsport – Standard Edition – Xbox Series X"))
