@@ -103,7 +103,7 @@ def get_reviews_amazon(keyword):
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
     value = title.text
-    title={"Product Name": title.text, "Product-img": img_link}
+    title={"product_name": title.text, "product_img": img_link}
     print(web)
     driver.get(web)
     captchaSolver()
