@@ -10,7 +10,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
 
-continue_exe = False
 driver = None
 dbase = None
 start = None
@@ -63,8 +62,6 @@ def captchaSolver():
         print("No captcha found")
 
 def get_reviews_amazon():
-    global start_pro
-    global continue_exe
     global next_page
     initialize_driver()
     next_page = ''
@@ -75,7 +72,6 @@ def get_reviews_amazon():
     end = time.time()
     print("time:", end-start)
 
-
 def after_func(keyword):
     global next_page
     global driver
@@ -85,7 +81,7 @@ def after_func(keyword):
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
     reviews = []
-    driver.implicitly_wait(1)
+    driver.implicitly_wait(5)
 
     items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
@@ -174,6 +170,6 @@ def after_func(keyword):
     return value
 
 
-# get_reviews_amazon()
-# after_func("lenevo thinkpad")
+get_reviews_amazon()
+# after_func("ls2 helmet")
 # print(get_reviews_amazon("Forza Motorsport – Standard Edition – Xbox Series X"))
