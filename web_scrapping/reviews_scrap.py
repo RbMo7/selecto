@@ -10,9 +10,14 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
 
+driver = None
+dbase = None
+start = None
+def initialize_driver():
 
-
-def get_reviews_amazon(keyword):
+    global driver
+    global dbase
+    global start
     start = time.time()
     dbase = get_database()
     web = 'https://www.amazon.com'
@@ -36,27 +41,42 @@ def get_reviews_amazon(keyword):
     options.add_argument(f'user-agent={user_agent}')
     # chrome_options.add_argument('--disable-dev-shm-usage')
 
-    def captchaSolver():
-        try:
-            img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
-            captcha = AmazonCaptcha.fromlink(img_div)
-            captcha_value = AmazonCaptcha.solve(captcha)
-            input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
-            button = driver.find_element(By.CLASS_NAME, "a-button-text")
-            button.click()
-        except:
-            print("No captcha found")
+    
 
     ##end captcha solver
     driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
     driver.get(web)
     captchaSolver()
+    
+
+def captchaSolver():
+    global driver
+    try:
+        img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
+        captcha = AmazonCaptcha.fromlink(img_div)
+        captcha_value = AmazonCaptcha.solve(captcha)
+        input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
+        button = driver.find_element(By.CLASS_NAME, "a-button-text")
+        button.click()
+    except:
+        print("No captcha found")
+
+def get_reviews_amazon():
+    global next_page
+    initialize_driver()
     next_page = ''
     driver.implicitly_wait(2)
     # keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
     # collection_name = dbase[keyword]
-    search = driver.find_element(By.ID, 'twotabsearchtextbox')
-    search.send_keys(keyword)
+    print("waiting for keyword")
+    end = time.time()
+    print("time:", end-start)
+
+def after_func(keyword):
+    global next_page
+    global driver
+    global start
+    driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
     # click search button
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
@@ -149,3 +169,7 @@ def get_reviews_amazon(keyword):
     print("Total time is: ", end - start)
     return value
 
+
+get_reviews_amazon()
+after_func("ls2 helmet")
+# print(get_reviews_amazon("Forza Motorsport – Standard Edition – Xbox Series X"))

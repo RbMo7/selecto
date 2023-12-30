@@ -1,6 +1,6 @@
 # views.py
 from django.http import JsonResponse
-from .reviews_scrap import get_reviews_amazon
+from .reviews_scrap import after_func
 import json
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -9,9 +9,11 @@ from .models import Product
 from .serializers import ProductSerializer
 from .database import get_database
 import bcrypt
+# from .scraping import scraping_thread
 
 # Get the database
 dbase = get_database()
+
 
 
 def search_and_scrape(request):
@@ -20,7 +22,7 @@ def search_and_scrape(request):
         search_text = data.get('searchText')
         try:
             # Scrape reviews using the utility function
-            reviews = get_reviews_amazon(search_text)
+            reviews = after_func(search_text)
             print (reviews)
 
         except Exception as error:
