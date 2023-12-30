@@ -10,8 +10,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
 
-
-
 def get_reviews_amazon(keyword):
     start = time.time()
     dbase = get_database()
@@ -53,8 +51,9 @@ def get_reviews_amazon(keyword):
     captchaSolver()
     next_page = ''
     driver.implicitly_wait(2)
-    # keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
+    keyword = "Dark Horse Deluxe The Witcher III: The Wild Hunt:"
     # collection_name = dbase[keyword]
+    driver.get_screenshot_as_file("screenshot.png")
     search = driver.find_element(By.ID, 'twotabsearchtextbox')
     search.send_keys(keyword)
     # click search button
@@ -64,12 +63,14 @@ def get_reviews_amazon(keyword):
     driver.implicitly_wait(5)
 
     items = wait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
+    print("hello")
     for item in items:
         # find ASIN number 
         try:
             title = item.find_element(By.XPATH,'.//span[@class="a-size-medium a-color-base a-text-normal"]')
         except:
             title = item.find_element(By.XPATH,'.//span[@class="a-size-base-plus a-color-base a-text-normal"]')
+        print("hello1")
         img_link = item.find_element(By.XPATH,'.//img[@class="s-image"]').get_attribute('src')
         data_asin = item.get_attribute("data-asin")
         product_asin = data_asin
@@ -102,7 +103,7 @@ def get_reviews_amazon(keyword):
     # except pymongo.errors.OperationFailure:  # If the collection doesn't exist
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
-    title={"Product Name": title.text, "Product-img": img_link}
+    title={"Product_Name": title.text, "Product-img": img_link}
     print(web)
     driver.get(web)
     captchaSolver()
@@ -146,4 +147,4 @@ def get_reviews_amazon(keyword):
     end = time.time()
     print("Total time is: ", end - start)
 
-print("the result is", get_reviews_amazon("marker"))
+get_reviews_amazon("marker")
