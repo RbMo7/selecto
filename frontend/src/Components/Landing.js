@@ -4,9 +4,12 @@ import logo from "./Images/Logo-NObg-NOtxt.png";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ProductListModal from "./Products";
+import Loading from "./Loading";
 
 function Landing(props) {
   const [searchText, setSearchText] = useState("");
+
+  const [loading, setLoading] = useState(true);
 
   const [showProductListModal, setShowProductListModal] = useState(false);
   const productData = [{searchText}];

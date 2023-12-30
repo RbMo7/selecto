@@ -41,7 +41,9 @@ def get_products(request, collection_name):
         products = list(collection.find())
 
         # Serialize the data and return the response
+        
         serializer = ProductSerializer(products, many=True)
+        print (serializer.data)
         return Response({'products': serializer.data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

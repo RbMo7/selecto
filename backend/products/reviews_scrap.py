@@ -9,8 +9,6 @@ from .database import get_database
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
-from django.http import JsonResponse
-
 
 
 def get_reviews_amazon(keyword):
@@ -25,7 +23,7 @@ def get_reviews_amazon(keyword):
             "profile.managed_default_content_settings.images": 2,
         }
     )
-    ##captcha solver
+    # captcha solver
     chrome_options = Options()
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--headless')
@@ -39,17 +37,20 @@ def get_reviews_amazon(keyword):
 
     def captchaSolver():
         try:
-            img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
+            img_div = driver.find_element(
+                By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
             captcha = AmazonCaptcha.fromlink(img_div)
             captcha_value = AmazonCaptcha.solve(captcha)
-            input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
+            input_field = driver.find_element(
+                By.ID, "captchacharacters").send_keys(captcha_value)
             button = driver.find_element(By.CLASS_NAME, "a-button-text")
             button.click()
         except:
             print("No captcha found")
 
-    ##end captcha solver
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+    # end captcha solver
+    driver = webdriver.Chrome(service=ChromeService(
+        ChromeDriverManager().install()), options=chrome_options)
     driver.get(web)
     captchaSolver()
     next_page = ''
@@ -64,14 +65,18 @@ def get_reviews_amazon(keyword):
     reviews = []
     driver.implicitly_wait(5)
 
-    items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
+    items = wait(driver, 10).until(EC.presence_of_all_elements_located(
+        (By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
-        # find ASIN number 
+        # find ASIN number
         try:
-            title = item.find_element(By.XPATH,'.//span[@class="a-size-medium a-color-base a-text-normal"]')
+            title = item.find_element(
+                By.XPATH, './/span[@class="a-size-medium a-color-base a-text-normal"]')
         except:
-            title = item.find_element(By.XPATH,'.//span[@class="a-size-base-plus a-color-base a-text-normal"]')
-        img_link = item.find_element(By.XPATH,'.//img[@class="s-image"]').get_attribute('src')
+            title = item.find_element(
+                By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]')
+        img_link = item.find_element(
+            By.XPATH, './/img[@class="s-image"]').get_attribute('src')
         data_asin = item.get_attribute("data-asin")
         product_asin = data_asin
         break
@@ -95,7 +100,6 @@ def get_reviews_amazon(keyword):
         #         break
         # reviews = overall
         # print(reviews)
-        print(title.text)
         return title.text
     else:
         print("Collection dose not exists")
@@ -105,23 +109,25 @@ def get_reviews_amazon(keyword):
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
     value = title.text
-    title={"Product_Name": title.text, "Product_img": img_link}
+    title = {"product_name": title.text, "product_img": img_link}
     print(web)
     driver.get(web)
     captchaSolver()
     driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
-    count=1
+    count = 1
     temp = 0
     insert = {}
     try:
         collection_name.insert_one(title)
         while True:
-            items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "a-row a-spacing-small review-data")]')))
+            items = wait(driver, 10).until(EC.presence_of_all_elements_located(
+                (By.XPATH, '//div[contains(@class, "a-row a-spacing-small review-data")]')))
             for item in items:
-                review = item.find_element(By.XPATH, './/span[@class="a-size-base review-text review-text-content"]')
+                review = item.find_element(
+                    By.XPATH, './/span[@class="a-size-base review-text review-text-content"]')
                 temp += 1
-                insert ={"Review":review.text}
+                insert = {"Review": review.text}
                 # print("No of reveiws:", temp)
                 collection_name.insert_one(insert)
                 reviews.append(review.text)
@@ -134,24 +140,20 @@ def get_reviews_amazon(keyword):
                 break
 
             try:
-                next_page = driver.find_element("xpath","//li[contains(@class, 'a-last')]/a").get_attribute('href')
+                next_page = driver.find_element(
+                    "xpath", "//li[contains(@class, 'a-last')]/a").get_attribute('href')
             except:
                 print("Page End")
                 break
             count += 1
-            print("Page:",count)
+            print("Page:", count)
             driver.get(next_page)
             driver.implicitly_wait(2)
     except:
         print("No reviews found")
         return 0
-        print(title.text)
     driver.quit()
     print("Reviews scraping done")
     end = time.time()
-    print(reviews)
     print("Total time is: ", end - start)
-    print(value)
-    print(title.text)
     return value
-

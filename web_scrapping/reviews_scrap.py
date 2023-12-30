@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 from amazoncaptcha import AmazonCaptcha
-from database import get_database
+from .database import get_database
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
