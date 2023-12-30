@@ -6,12 +6,9 @@ export default function About(props) {
     <Container className="py-5">
       <Row>
         <Col className="text-center">
-          <h1 className="display-4">ABOUT SELECTO</h1>
+          <h1 className="display-4" style={{ fontWeight: "bold" }}>Discover the World of Selecto</h1>
           <p className="lead">
-            Welcome to Selecto! Your go-to platform for personalized product
-            recommendations. Whether you're a seasoned shopper or exploring new
-            products, our mission is to simplify the selection process and offer
-            tailored suggestions based on your preferences.
+            Welcome to Selecto! Your personalized gateway to a world of curated product recommendations.
           </p>
         </Col>
       </Row>
@@ -19,44 +16,30 @@ export default function About(props) {
       <Row className="my-5">
         <Col md={4}>
           <div className="about-item text-center">
-            <h2>OUR MISSION</h2>
+            <h2>Our Mission</h2>
             <hr />
             <p>
-              At Selecto, we strive to make the product selection journey
-              seamless. Understanding that each shopper is unique, we utilize
-              data analysis and algorithms to comprehend your preferences,
-              providing personalized recommendations. Our goal is to guide users
-              in discovering new products effortlessly.
+              At Selecto, we aim to simplify your product selection journey by providing personalized recommendations based on your unique preferences.
             </p>
           </div>
         </Col>
 
         <Col md={4}>
           <div className="about-item text-center">
-            <h2>FEATURES</h2>
+            <h2>Features</h2>
             <hr />
             <p>
-              Selecto offers a range of features to enhance your product
-              discovery experience. Users can search for products based on their
-              interests, and registered users can save and rate their favorite
-              items, creating personalized collections. With features like
-              "Recommended Products," we aim to present a diverse selection to
-              cater to every shopper's preferences.
+              Explore a range of features designed to enhance your product discovery experience. Save and rate your favorite items, and enjoy personalized collections.
             </p>
           </div>
         </Col>
 
         <Col md={4}>
           <div className="about-item text-center">
-            <h2>FUTURE PLANS</h2>
+            <h2>Future Plans</h2>
             <hr />
             <p>
-              Exciting plans lie ahead for Selecto. We plan to integrate with
-              renowned e-commerce services, enabling users to seamlessly explore
-              and purchase products directly through our platform. Additionally,
-              we aspire to build a community of enthusiastic shoppers sharing
-              their product experiences, tips, and recommendations. Stay tuned
-              for more updates!
+              Exciting plans ahead! We're integrating with renowned e-commerce services and building a community of enthusiastic shoppers. Stay tuned for updates!
             </p>
           </div>
         </Col>
@@ -69,6 +52,8 @@ export default function About(props) {
           <h1 className="display-4">
             <i>*Enjoy Exploring Products with Selecto*</i>
           </h1>
+          <p className="lead">Ready to get started? Register now and embark on a journey of personalized product discovery!</p>
+          <button className="btn btn-primary">Sign Up</button>
         </Col>
       </Row>
     </Container>
