@@ -1,10 +1,11 @@
 // SignInModal.js
 import React, { useState } from "react";
 import { Modal, Button, Form, Image } from "react-bootstrap";
-import selectoLogo from "./Images/Logo-NObg.png";
+import selectoLogo from "./Images/logotext.png";
 import RegisterModal from "./RegisterModal";
 import toast from "react-hot-toast";
 import axios from "axios";
+import "./styles.css";
 
 function SignInModal(props) {
   const [email, setEmail] = useState("");
@@ -56,6 +57,7 @@ function SignInModal(props) {
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      className="glassMorphism" // Apply the glass morphism class
     >
       <Modal.Header closeButton>
         <Modal.Title className="text-center w-100">Sign In</Modal.Title>

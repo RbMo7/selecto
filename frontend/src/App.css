@@ -24,6 +24,56 @@
   color: white;
 }
 
+/* Hover effect on nav bar */
+.navbar-link {
+  position: relative;
+  text-decoration: none; /* Remove default underline */
+  color: black; /* Set your default text color */
+}
+
+.navbar-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px; /* Set the thickness of the underline */
+  background-color: black; /* Set the color of the underline */
+  transition: width 0.3s ease-in-out;
+}
+
+.navbar-link:hover::before {
+  width: 100%;
+}
+
+.sign-in-link,
+.register-link {
+  transition: color 0.3s ease-in-out;
+}
+
+.sign-in-link:hover {
+  color:black /* Set the desired hover color for "Sign In" */;
+}
+
+.register-link:hover {
+  color: black/* Set the desired hover color for "Register" */;
+}
+
+/* transition on search button*/
+
+.btn-transition {
+  transition: all 0.3s ease-in-out;
+  border: 2px solid rgba(0, 123, 255, 0.5);
+  background-color: transparent;
+  color:black;
+}
+
+.btn-transition:hover {
+  border: 2px solid #007bff;
+  transform: scale(1.11);
+}
+
+
 .App-link {
   color: #61dafb;
 }

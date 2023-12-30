@@ -1,7 +1,8 @@
 // RegisterModal.js
 import React, { useState } from "react";
 import { Modal, Button, Form, Image, Col } from "react-bootstrap";
-import selectoLogo from "./Images/Logo-NObg.png";
+import selectoLogo from "./Images/logotext.png";
+//import selectoLogo from "./Images/Logo-NObg.png";
 import SignInModal from "./SignInModal";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -56,6 +57,8 @@ function RegisterModal(props) {
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      className="glassMorphism" // Apply the glass morphism class
+
     >
       <Modal.Header closeButton>
         <Modal.Title className="text-center w-100">Register</Modal.Title>
