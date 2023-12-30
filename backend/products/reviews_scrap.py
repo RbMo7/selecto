@@ -105,6 +105,7 @@ def after_func(keyword,scraping_done_event, results):
     web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
     print(img_link)
     print(title.text)
+    results[0]=title.text
     list_of_collections = dbase.list_collection_names()
     # print(list_of_collections)
     if title.text in list_of_collections:
@@ -122,6 +123,7 @@ def after_func(keyword,scraping_done_event, results):
         #         break
         # reviews = overall
         # print(reviews)
+        scraping_done_event.set()
         return title.text
     else:
         print("Collection dose not exists")
@@ -176,7 +178,7 @@ def after_func(keyword,scraping_done_event, results):
     end = time.time()
     print("Total time is: ", end - start)
     # print (value)
-    results[0]=value
+    
     scraping_done_event.set()
     return value
 

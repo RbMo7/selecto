@@ -6,7 +6,8 @@ import axios from "axios";
 function ProductListModal({ productData, show, onHide }) {
   const [products, setProducts] = useState([]);
   const searchText = productData.length > 0 ? productData[0].searchText : "";
-  const collectionName = searchText;
+  const productName = productData.length > 0 ? productData[0].productName : "";
+
 
   // Using useEffect to fetch data when the component mounts
   useEffect(() => {
@@ -15,15 +16,20 @@ function ProductListModal({ productData, show, onHide }) {
 
     // Makaing a GET request to fetch data from the Django backend
     axios
-      .get(`${apiUrl}${collectionName}/`)
+      .get(`${apiUrl}${productName}/`)
       .then((response) => {
+        // Filter out objects with null values
+        const filteredProducts = response.data.products.filter(
+          (product) => product.product_name !== null && product.product_img !== null
+        );
         // Update the state with the fetched products
-        setProducts(response.data.products);
+        console.log(filteredProducts);
+        setProducts(filteredProducts);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [collectionName]);
+  }, [productName]);
 
   return (
     <Modal show={show} onHide={onHide} size="lg">
@@ -32,8 +38,8 @@ function ProductListModal({ productData, show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         <div>
-          {products.map((product, index) => (
-            <ProductCard key={index} product={product} />
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </Modal.Body>

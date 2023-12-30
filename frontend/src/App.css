@@ -87,6 +87,24 @@
   }
 }
 
+/* Loading.css */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.custom-loader {
+  width: 700px;
+  height: 500px;
+  background: url('https://cdn.dribbble.com/users/1277312/screenshots/8956714/media/65ce10c0137d28b104c0b09272cd7f84.gif') center center no-repeat;
+  background-size: cover;
+}
+
+
+
+
 
 
 
