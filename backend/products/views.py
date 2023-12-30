@@ -21,6 +21,7 @@ def search_and_scrape(request):
         try:
             # Scrape reviews using the utility function
             reviews = get_reviews_amazon(search_text)
+            print (reviews)
 
         except Exception as error:
             print("Error:", error)
@@ -32,12 +33,12 @@ def search_and_scrape(request):
 @api_view(['GET'])
 def get_products(request, collection_name):
     try:
+        
         # Dynamically set the collection name based on user input
         collection = dbase[collection_name]
 
         # Fetch products from the specified collection
         products = list(collection.find())
-        print('hehehaha')
 
         # Serialize the data and return the response
         serializer = ProductSerializer(products, many=True)
