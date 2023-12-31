@@ -8,7 +8,6 @@ function ProductListModal({ productData, show, onHide }) {
   const searchText = productData.length > 0 ? productData[0].searchText : "";
   const productName = productData.length > 0 ? productData[0].productName : "";
 
-
   // Using useEffect to fetch data when the component mounts
   useEffect(() => {
     // Define the API endpoint URL
@@ -20,7 +19,8 @@ function ProductListModal({ productData, show, onHide }) {
       .then((response) => {
         // Filter out objects with null values
         const filteredProducts = response.data.products.filter(
-          (product) => product.product_name !== null && product.product_img !== null
+          (product) =>
+            product.product_name !== null && product.product_img !== null
         );
         // Update the state with the fetched products
         console.log(filteredProducts);

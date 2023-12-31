@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import {Card, Col, Container, Row } from "react-bootstrap";
 
 function ProductCard({ product }) {
   const { product_name, product_img } = product;
@@ -15,7 +15,6 @@ function ProductCard({ product }) {
             <Card.Body>
               <Card.Title>{product_name}</Card.Title>
               <Card.Text>description</Card.Text>
-              <Button variant="primary">Learn More</Button>
             </Card.Body>
           </Col>
         </Row>
