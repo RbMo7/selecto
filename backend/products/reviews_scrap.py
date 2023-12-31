@@ -10,9 +10,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
 
+continue_exe = False
 driver = None
 dbase = None
 start = None
+
 def initialize_driver():
 
     global driver
@@ -62,6 +64,8 @@ def captchaSolver():
         print("No captcha found")
 
 def get_reviews_amazon():
+    global start_pro
+    global continue_exe
     global next_page
     initialize_driver()
     next_page = ''
@@ -72,7 +76,11 @@ def get_reviews_amazon():
     end = time.time()
     print("time:", end-start)
 
-def after_func(keyword):
+
+    
+
+
+def after_func(keyword,scraping_done_event, results):
     global next_page
     global driver
     global start
@@ -81,7 +89,7 @@ def after_func(keyword):
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
     reviews = []
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(1)
 
     items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
     for item in items:
@@ -97,6 +105,7 @@ def after_func(keyword):
     web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
     print(img_link)
     print(title.text)
+    results[0]=title.text
     list_of_collections = dbase.list_collection_names()
     # print(list_of_collections)
     if title.text in list_of_collections:
@@ -114,6 +123,7 @@ def after_func(keyword):
         #         break
         # reviews = overall
         # print(reviews)
+        scraping_done_event.set()
         return title.text
     else:
         print("Collection dose not exists")
@@ -164,12 +174,15 @@ def after_func(keyword):
         print("No reviews found")
         return 0
     driver.quit()
-    print("Reviews scraping done")
+    print(reviews)
     end = time.time()
     print("Total time is: ", end - start)
+    # print (value)
+    
+    scraping_done_event.set()
     return value
 
 
-get_reviews_amazon()
-# after_func("ls2 helmet")
+# get_reviews_amazon()
+# after_func("lenevo thinkpad")
 # print(get_reviews_amazon("Forza Motorsport – Standard Edition – Xbox Series X"))

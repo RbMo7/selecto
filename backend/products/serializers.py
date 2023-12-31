@@ -1,9 +1,12 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Product
 
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['product_name','product_img']
-        extra_kwargs = {'product_name': {'required': False}, 'product_img': {'required': False}}
+class ProductSerializer(serializers.Serializer):
+    product_name = serializers.CharField()
+    product_img = serializers.URLField()
+
+    def to_representation(self, instance):
+        return {
+            'product_name': instance.get('product_name'),
+            'product_img': instance.get('product_img')
+        }
