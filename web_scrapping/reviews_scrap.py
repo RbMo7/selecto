@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 from amazoncaptcha import AmazonCaptcha
-from database import get_database
+from .database import get_database
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
@@ -168,7 +168,7 @@ def after_func(keyword):
         print("No reviews found")
         return 0
     driver.quit()
-    print(reviews)
+    print("Reviews scraping done")
     end = time.time()
     print("Total time is: ", end - start)
     return value

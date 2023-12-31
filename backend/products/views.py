@@ -1,83 +1,140 @@
+# views.py
 from django.http import JsonResponse
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait as wait
-from selenium.webdriver.support import expected_conditions as EC
-from amazoncaptcha import AmazonCaptcha
+from .reviews_scrap import after_func
+import json
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
+from .models import Product
+from .serializers import ProductSerializer
+from .database import get_database
+import bcrypt
+# from .scraping import scraping_thread
+
+# Get the database
+dbase = get_database()
+
+
 
 def search_and_scrape(request):
-    print("search_text")
     if request.method == 'POST':
-        
-        search_text = request.POST.get('searchText')
-
-        print(search_text)
-
-        # Your existing scraping code
-        web = 'https://www.amazon.com'
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-
-        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-        driver.get(web)
-
+        data = json.loads(request.body.decode('utf-8'))
+        search_text = data.get('searchText')
         try:
-            img_div = driver.find_element(By.XPATH, "//div[@class = 'a-row a-text-center']//img").get_attribute('src')
-            captcha = AmazonCaptcha.fromlink(img_div)
-            captcha_value = AmazonCaptcha.solve(captcha)
-            input_field = driver.find_element(By.ID, "captchacharacters").send_keys(captcha_value)
-            button = driver.find_element(By.CLASS_NAME, "a-button-text")
-            button.click()
-        except:
-            print("No captcha found")
+            # Scrape reviews using the utility function
+            reviews = after_func(search_text)
+            print (reviews)
 
-        next_page = ''
-        driver.implicitly_wait(5)
-        search = driver.find_element(By.ID, 'twotabsearchtextbox')
-        search.send_keys(search_text)
-        # click search button
-        search_button = driver.find_element(By.ID, 'nav-search-submit-button')
-        search_button.click()
-        reviews = []
-        driver.implicitly_wait(5)
+        except Exception as error:
+            print("Error:", error)
 
-        items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
-        for item in items:
-            data_asin = item.get_attribute("data-asin")
-            product_asin = data_asin
-            break
-        print(product_asin)
-        web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
-        print(web)
-        driver.get(web)
-        driver.implicitly_wait(5)
-        count=1
-        while True:
-            items = wait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "a-row a-spacing-small review-data")]')))
-            for item in items:
-                review = item.find_element(By.XPATH, './/span[@class="a-size-base review-text review-text-content"]')
-                reviews.append(review.text)
-            try:
-                next_page = driver.find_element("xpath","//li[contains(@class, 'a-last')]/a").get_attribute('href')
-            except:
-                print("Page End")
-                break
-            count += 1
-            print("Page:",count)
-            driver.get(next_page)
-            driver.implicitly_wait(5)
+    return JsonResponse({'error': 'Invalid request method'})
 
-        driver.quit()
+
+# @api_view(['GET'])
+@api_view(['GET'])
+def get_products(request, collection_name):
+    try:
         
-        # Save reviews to a text file
-        file_path = 'scraped_reviews.txt'
-        with open(file_path, 'w', encoding='utf-8') as file:
-            for review in reviews:
-                file.write(review + '\n')
+        # Dynamically set the collection name based on user input
+        collection = dbase[collection_name]
 
-        # Return a success message or any other response
-        return JsonResponse({'message': 'Reviews saved to scraped_reviews.txt'})
-    else:
-        return JsonResponse({'error': 'Invalid request method'})
+        # Fetch products from the specified collection
+        products = list(collection.find())
+
+        # Serialize the data and return the response
+        
+        serializer = ProductSerializer(products, many=True)
+        print (serializer.data)
+        return Response({'products': serializer.data})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def register_user(request):
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body.decode('utf-8'))
+            user_data = data.get('userData')
+
+            if user_data is None:
+                return JsonResponse({'error': 'User data is missing'})
+
+            # Extract user details
+            name = user_data.get('name')
+            email = user_data.get('email')
+            password = user_data.get('password')
+
+            # Validate required fields
+            if not (name and email and password):
+                return JsonResponse({'error': 'Incomplete user data'})
+
+            # Access the 'userInfo' collection
+            user_info_collection = dbase['userInfo']
+
+            # Check if email is already registered
+            existing_user = user_info_collection.find_one({'email': email})
+            if existing_user:
+                return JsonResponse({'error': 'Email is already registered'})
+
+            # Hash the password
+            hashed_password = bcrypt.hashpw(
+                password.encode('utf-8'), bcrypt.gensalt())
+
+            # Prepare the document to be inserted
+            user_document = {
+                'name': name,
+                'email': email,
+                # Ensure to decode the hashed password
+                'password': hashed_password.decode('utf-8'),
+            }
+
+            # Insert the document into the 'userInfo' collection
+            user_info_collection.insert_one(user_document)
+
+            return JsonResponse({'message': 'Registration successful'})
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return JsonResponse({'error': 'Internal server error'})
+
+    return JsonResponse({'error': 'Invalid request method'})
+
+
+def signin_user(request):
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body.decode('utf-8'))
+            user_data = data.get('userData')
+
+            if user_data is None:
+                return JsonResponse({'error': 'User data is missing'})
+
+            # Extract user details
+            email = user_data.get('email')
+            password = user_data.get('password')
+
+            # Validate required fields
+            if not (email and password):
+                return JsonResponse({'error': 'Incomplete user data'})
+
+            # Access the 'userInfo' collection
+            user_info_collection = dbase['userInfo']
+
+            # Check if email exists in the database
+            user = user_info_collection.find_one({'email': email})
+            if not user:
+                return JsonResponse({'error': 'Email not registered'})
+
+            # Verify the provided password against the stored hashed password
+            stored_password = user.get('password')
+            if not bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                return JsonResponse({'error': 'Invalid password'})
+
+            return JsonResponse({'message': 'Login successful'})
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return JsonResponse({'error': 'Internal server error'})
+
+    return JsonResponse({'error': 'Invalid request method'})
