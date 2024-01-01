@@ -102,12 +102,134 @@
   background-size: cover;
 }
 
+/* src/components/ProductDetails*/
+.product-container {
+  max-width: 800px;
+  margin: 18px auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Adjust the ratio as needed */
+  gap: 20px; /* Adjust the gap between columns */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+.title-box {
+  grid-column: span 2; /* Span across both columns */
+  margin-bottom: 20px;
+}
+.title-box h1 {
+  font-size: 1.5rem;
+}
+.photo-and-price {
+  display: flex;
+  flex-direction: column;
+}
+.photo-box {
+  max-width: 100%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
+.photo-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
 
+.price-box {
+  margin-top: 10px; /* Adjust margin as needed */
+}
 
+.description-box {
+  max-width: 100%;
+}
 
+.review-box {
+  margin-top: 20px;
+  grid-column: span 2
+}
 
+.price-box,
+.description-box,
+.review-box {
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd; /* Add border for better separation */
+}
 
+/* dashboard.css */
+.dashboard-container {
+  max-width: 50%; /* Adjust the max-width to your desired value */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 18px auto;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
 
+.userDetails {
+  display: flex;
+  flex-direction: column; /* Arrange items in a column */
+  align-items: center;
+  margin-bottom: 20px;
+}
 
+.userDetails img {
+  width: 80px;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 10px; /* Adjust margin as needed */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
 
+.userInfo {
+  text-align: center; /* Center text within userInfo */
+}
+
+.dashboard-full-name,
+.user-name,
+.user-email {
+  margin: 5px; /* Adjust margin as needed */
+  font-size: 18px;
+}
+
+.dashboardContent,
+.userInfo{
+  padding: 10px;
+}
+
+/* TrackedProducts.css */
+.tracked-products {
+  width: 100%;
+  margin-top: 50px;
+ }
+
+.tracked-products h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.tracked-products ul {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ grid-gap: 30px;
+ padding: 0;
+ list-style: none;
+}
+
+.tracked-products li img {
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  border: 2px solid #ddd;
+ }
+
+.tracked-products li p {
+  margin: 10px 0;
+  font-size: 18px;
+  text-align: center;
+ }

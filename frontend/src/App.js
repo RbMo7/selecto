@@ -4,8 +4,8 @@ import Navbar from "./Components/Navbar";
 import Landing from "./Components/Landing";
 import About from "./Components/About";
 import NotFound from "./Components/NotFound";
-
-
+import ProductDetails from "./Components/ProductDetails";
+import Dashboard from "./Components/dashboard";
 import { Toaster } from "react-hot-toast";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -21,7 +21,8 @@ export default function App() {
             <Route path="/" element={<Landing />} />
 
             <Route path="/About" element={<About />} />
-
+            <Route path="/productdetails" element={<ProductDetails />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
