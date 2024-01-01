@@ -9,11 +9,12 @@ from .serializers import ProductSerializer
 from .database import get_database
 import bcrypt
 from .nlp import process_nlp_collection
+from .summaryfinal import summarize
 # from .Nlpfinal import get_data_from_mongodb, tokenize_and_analyze_sentiment, analyze_with_roberta, get_summary, cut_text_into_sentences
 # from .scraping import scraping_thread
 
 # Get the database
-dbase = get_database()
+
 
 
 def search_and_scrape(request):
@@ -37,6 +38,8 @@ def search_and_scrape(request):
 @api_view(['GET'])
 def get_products(request, collection_name):
     try:
+        database_name='Reviews'
+        dbase = get_database(database_name)
         # print("yeta ta aayo")
         # Dynamically set the collection name based on user input
         collection = dbase[collection_name]
@@ -68,6 +71,20 @@ def nlp_view(request, product_name):
     except Exception as e:
         # Handle any exceptions and return an error response
         return JsonResponse({'error': str(e)}, status=500)
+    
+def get_summary_text(request, product_name):
+
+    try:
+        # Call the existing NLP processing function
+        summary = summarize(product_name)
+
+        # Return the results as JSON
+        return JsonResponse({
+            'summary': summary
+        })
+    except Exception as e:
+        # Handle any exceptions and return an error response
+        return JsonResponse({'error': str(e)}, status=500)
 
 
 def register_user(request):
@@ -89,6 +106,8 @@ def register_user(request):
                 return JsonResponse({'error': 'Incomplete user data'})
 
             # Access the 'userInfo' collection
+            database_name='Users'
+            dbase = get_database(database_name)
             user_info_collection = dbase['userInfo']
 
             # Check if email is already registered
@@ -138,6 +157,8 @@ def signin_user(request):
                 return JsonResponse({'error': 'Incomplete user data'})
 
             # Access the 'userInfo' collection
+            database_name='Users'
+            dbase = get_database(database_name)
             user_info_collection = dbase['userInfo']
 
             # Check if email exists in the database
@@ -149,11 +170,17 @@ def signin_user(request):
             stored_password = user.get('password')
             if not bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
                 return JsonResponse({'error': 'Invalid password'})
+            
+            user_id = str(user.get('_id'))
 
-            return JsonResponse({'message': 'Login successful'})
+            # Create a dictionary for the response
+
+            print(user_id)
+            return JsonResponse({'user_id': user_id})
 
     except Exception as e:
         print(f"An error occurred: {e}")
         return JsonResponse({'error': 'Internal server error'})
 
     return JsonResponse({'error': 'Invalid request method'})
+

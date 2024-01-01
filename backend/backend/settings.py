@@ -143,6 +143,10 @@ CSRF_COOKIE_SECURE = True  # or False if not using HTTPS in development
 CSRF_COOKIE_SAMESITE = 'Lax'  # or 'Strict' based on your requirements
 
 
+# Using a database-backed session engine
+# SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

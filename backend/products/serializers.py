@@ -8,5 +8,6 @@ class ProductSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {
             'product_name': instance.get('product_name'),
-            'product_img': instance.get('product_img')
+            'product_img': instance.get('product_img'),
+            "product_price": instance.get('product_price')
         }

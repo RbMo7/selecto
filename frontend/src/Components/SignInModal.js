@@ -27,13 +27,20 @@ function SignInModal(props) {
     }
 
     try {
-      const { data } = await axios.post(
+      const response  = await axios.post(
         "http://localhost:8000/selecto/api/signin/",
         { userData }
       );
 
+      const data = response.data;
+
       if (!data.error) {
+        const userId=data.user_id;
+        console.log(userId);
+        localStorage.setItem('access_token', userId)
         toast.success("SignIn successfully");
+        props.onHide();
+        navigate (`/dashboard/${userId}`);
         //redirecting user to userdashboard
       } else {
         toast.error(data.error);

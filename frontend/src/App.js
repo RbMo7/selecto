@@ -7,6 +7,7 @@ import NotFound from "./Components/NotFound";
 import ProductDetails from "./Components/ProductDetails";
 import Dashboard from "./Components/dashboard";
 import { Toaster } from "react-hot-toast";
+import Protected from "./PrivateRoute";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -22,7 +23,15 @@ export default function App() {
 
             <Route path="/About" element={<About />} />
             <Route path="/productdetails" element={<ProductDetails />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/dashboard/:id"
+              element={
+                <Protected>
+                  <Dashboard />
+                </Protected>
+              }
+            />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

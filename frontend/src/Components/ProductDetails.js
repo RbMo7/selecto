@@ -11,7 +11,7 @@ const ProductDetail = () => {
 
       <div className="photo-and-price">
         <div className="photo-box">
-          <img src={image} alt="Product Image" style={{ maxWidth: '100%' }} />
+          <img src={image} alt="" style={{ maxWidth: '100%' }} />
         </div>
 
         <div className="price-box">
