@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-//import logo from "./Images/Logo-NObg.png";
+import logo from "./Images/Logo-NObg.png";
 import SignInModal from "./SignInModal";
 import RegisterModal from "./RegisterModal";
-import logo from "./Images/Logos.png";
+// import logo from "./Images/Logos.png";
 
 function BasicNavbar() {
   const [showModal, setShowModal] = useState(null);

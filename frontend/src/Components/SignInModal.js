@@ -1,7 +1,7 @@
 // SignInModal.js
 import React, { useState } from "react";
 import { Modal, Button, Form, Image } from "react-bootstrap";
-import selectoLogo from "./Images/logotext.png";
+import selectoLogo from "./Images/Logo-NObg.png";
 import RegisterModal from "./RegisterModal";
 import toast from "react-hot-toast";
 import axios from "axios";

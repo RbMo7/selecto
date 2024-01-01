@@ -8,11 +8,12 @@ from rest_framework.response import Response
 from .serializers import ProductSerializer
 from .database import get_database
 import bcrypt
+from .nlp import process_nlp_collection
+# from .Nlpfinal import get_data_from_mongodb, tokenize_and_analyze_sentiment, analyze_with_roberta, get_summary, cut_text_into_sentences
 # from .scraping import scraping_thread
 
 # Get the database
 dbase = get_database()
-
 
 
 def search_and_scrape(request):
@@ -23,10 +24,9 @@ def search_and_scrape(request):
             # Scrape reviews using the utility function
             reviews = scrap(search_text)
 
-            print ("views ma : " ,reviews)
+            print("views ma : ", reviews)
 
             return JsonResponse({'title': reviews})
-
 
         except Exception as error:
             print("Error:", error)
@@ -34,10 +34,10 @@ def search_and_scrape(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 
-
 @api_view(['GET'])
 def get_products(request, collection_name):
     try:
+        # print("yeta ta aayo")
         # Dynamically set the collection name based on user input
         collection = dbase[collection_name]
 
@@ -50,6 +50,25 @@ def get_products(request, collection_name):
         return Response({'products': serializer.data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
+def nlp_view(request, product_name):
+
+    try:
+        # Call the existing NLP processing function
+        print("printing collection in views:", product_name)
+        avg_negative, avg_neutral, avg_positive = process_nlp_collection(product_name)
+
+        # Return the results as JSON
+        return JsonResponse({
+            'average_negative': avg_negative,
+            'average_neutral': avg_neutral,
+            'average_positive': avg_positive,
+        })
+    except Exception as e:
+        # Handle any exceptions and return an error response
+        return JsonResponse({'error': str(e)}, status=500)
+
 
 def register_user(request):
     try:
