@@ -106,10 +106,11 @@ from pymongo.server_api import ServerApi
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 from scipy.special import softmax
-
+import time
 
 
 def process_nlp_collection(title):
+    start=time.time()
     uri = "mongodb+srv://selecto:DmdSvpAnRnudk1Zj@reviews-list.q56a6p2.mongodb.net/?retryWrites=true&w=majority"
     client = MongoClient(uri, server_api=ServerApi('1'))
     try:
@@ -183,6 +184,9 @@ def process_nlp_collection(title):
     average_negative = df_table["Negative (%)"].mean()
     average_neutral = df_table["Neutral (%)"].mean()
     average_positive = df_table["Positive (%)"].mean()
+    end=time.time()
+    total_time=end-start
+    print ("total time for nlp :",total_time)
     print("Average Negative Percentage:", average_negative)
     print("Average Neutral Percentage:", average_neutral)
     print("Average Positive Percentage:", average_positive)
