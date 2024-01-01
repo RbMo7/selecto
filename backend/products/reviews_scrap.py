@@ -98,9 +98,14 @@ def after_func(keyword, scraping_done_event, results):
         try:
             title = item.find_element(
                 By.XPATH, './/span[@class="a-size-medium a-color-base a-text-normal"]')
+            
         except:
             title = item.find_element(
                 By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]')
+        try:
+            price = item.find_element(By.XPATH, './/span[@class="a-price-whole"]')
+        except:
+            print("Price not found")
         img_link = item.find_element(
             By.XPATH, './/img[@class="s-image"]').get_attribute('src')
         data_asin = item.get_attribute("data-asin")
@@ -109,6 +114,7 @@ def after_func(keyword, scraping_done_event, results):
     web = "https://www.amazon.com/product-reviews/" + product_asin + "/"
     print(img_link)
     print(title.text)
+    print(price.text)
     results[0] = title.text
     list_of_collections = dbase.list_collection_names()
     # print(list_of_collections)
@@ -137,7 +143,7 @@ def after_func(keyword, scraping_done_event, results):
     #     print("This collection doesn't exist")
     collection_name = dbase[title.text]
     value = title.text
-    title = {"product_name": title.text, "product_img": img_link}
+    title = {"product_name": title.text, "product_img": img_link, "product_price": price.text}
     print(web)
     driver.get(web)
     captchaSolver()

@@ -10,7 +10,7 @@ def scrap(keyword):
     scraping_done = threading.Event()
 
     thread_one = threading.Thread(target=get_reviews_amazon())
-    thread_two = threading.Thread(target=after_func, args=(keyword, scraping_done, results))
+    thread_two = threading.Thread(target=after_func, args=("mamaearth face", scraping_done, results))
 
     thread_one.start()
     thread_two.start()
