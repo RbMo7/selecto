@@ -1,5 +1,6 @@
 // SignInModal.js
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form, Image } from "react-bootstrap";
 import selectoLogo from "./Images/logotext.png";
 import RegisterModal from "./RegisterModal";
@@ -11,7 +12,7 @@ function SignInModal(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();

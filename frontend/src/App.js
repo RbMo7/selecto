@@ -4,7 +4,7 @@ import Navbar from "./Components/Navbar";
 import Landing from "./Components/Landing";
 import About from "./Components/About";
 import NotFound from "./Components/NotFound";
-
+import ProductDetails from "./Components/ProductDetails";
 
 import { Toaster } from "react-hot-toast";
 
@@ -21,7 +21,7 @@ export default function App() {
             <Route path="/" element={<Landing />} />
 
             <Route path="/About" element={<About />} />
-
+            <Route path="/productdetails" element={<ProductDetails />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
