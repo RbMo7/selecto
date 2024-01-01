@@ -8,26 +8,28 @@ import ProductDetails from "./Components/ProductDetails";
 import Dashboard from "./Components/dashboard";
 import { Toaster } from "react-hot-toast";
 import Protected from "./PrivateRoute";
-
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 export default function App() {
+  const [modal, setmodal] = useState(false);
+  const isAuthenticated = !!localStorage.getItem("accessToken");
   return (
     <>
       <div>
         <Toaster position="bottom-right" toastOptions={{ duration: 5000 }} />
         <Router>
-          <Navbar />
+          <Navbar isAuthenticated={isAuthenticated} setmodal={setmodal} />
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<Landing  modal={modal} setmodal={setmodal} />} />
 
-            <Route path="/About" element={<About />} />
-            <Route path="/productdetails" element={<ProductDetails />} />
+            <Route path="/About" element={<About modal={modal} setmodal={setmodal}  />} />
+            <Route path="/productdetails" element={<ProductDetails modal={modal} setmodal={setmodal}  />} />
             <Route
               path="/dashboard/:id"
               element={
                 <Protected>
-                  <Dashboard />
+                  <Dashboard modal={modal} setmodal={setmodal}  />
                 </Protected>
               }
             />
