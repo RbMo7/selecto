@@ -105,7 +105,7 @@
 /* src/components/ProductDetails*/
 .product-container {
   max-width: 800px;
-  margin: 15px auto;
+  margin: 18px auto;
   padding: 20px;
   display: grid;
   grid-template-columns: 1fr 2fr; /* Adjust the ratio as needed */
