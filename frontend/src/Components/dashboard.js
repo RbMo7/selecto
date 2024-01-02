@@ -37,8 +37,9 @@ function Dashboard() {
   const [userData, setUserData] = useState({});
   const [username, setusername] = useState("");
   const [useremail, setuseremail] = useState("");
+  const [topCollections, setTopCollections] = useState([]);
+  
   const user_id = localStorage.getItem('access_token')
-  console.log("hello")
   console.log(`http://127.0.0.1:8000/selecto/api/userdetails/${user_id}/`)
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,6 +49,12 @@ function Dashboard() {
         setusername(response.data.user['name']); // Update state with username
         setuseremail(response.data.user['email']);
         setLoading(false);
+
+        console.log("aslkfdja")
+        setTopCollections(response.data.hot_products['top_collections'])
+        console.log('Top Collections:', topCollections);
+        
+        
       } catch (error) {
         console.error('Error fetching user data:', error);
         setLoading(false);
@@ -56,6 +63,8 @@ function Dashboard() {
 
     fetchUserData();
   }, []); 
+
+
 
   const settings = {
     dots: true,
@@ -131,7 +140,7 @@ function Dashboard() {
       </div>
       
   </div>
-  <HotProductList/>  
+  <HotProductList topCollections = {topCollections}/>
   </>
   );
 }

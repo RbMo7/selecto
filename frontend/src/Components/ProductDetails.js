@@ -11,6 +11,7 @@ const ProductDetail = () => {
   const [Positive, setPositive] = useState("");
   const [Neutral, setNeutral] = useState("");
   const [Summary, setSummary] = useState("");
+  
 
   // const { productName } = useParams();
   // console.log(productName)

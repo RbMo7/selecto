@@ -287,15 +287,48 @@ grid-gap: 50px;
   display: flex;
   justify-content:space-evenly; /* Adjust as needed */
   align-items: center; /* Adjust as needed */
-  flex-wrap: wrap; /* Allows items to wrap to the next row if needed */
+  flex-wrap: wrap;/* Allows items to wrap to the next row if needed */
+  max-width: 100%;
 }
 
 .hot-product {
   /* Add styling for individual products if needed */
-  margin: 2px; /* Adjust as needed */
+  flex-grow: 0;
+  margin: 2px;
+  max-width: 200px;
+  position: relative;
+ /* Adjust as needed */
   /* ... other styles */
 }
 
 .hotProducts-edit{
   text-align: center;
+}
+
+.title-box-hot h5 {
+  max-width: 100%; /* Set the maximum width for the title */
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+
+
+
+.hot-product:hover .hot-product-full {
+  display: block;
+}
+
+.hot-product-full {
+  
+  border: #282c34 solid 1px;
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  display: none;
+  width: 100%; /* Set the width as needed */
+  padding: 5px; /* Add padding for better visibility */
+  background-color: white; /* Set background color */
+  z-index: 1;
+  word-wrap: break-word;
+
 }
