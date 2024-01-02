@@ -309,10 +309,8 @@ def after_func(keyword, scraping_done_event, results):
     if title.text in list_of_collections:
         collection_name = dbase[title.text]
         # Assuming 'count' is the field you want to update
-        filter_criteria = {}  # Provide a filter criteria based on your document structure
-
         # Update the 'count' field using $inc to increment the value
-        update_result = collection_name.update_one(filter_criteria, {"$inc": {"count": 1}})
+        update_result = collection_name.update_one({"$inc": {"count": 1}})
 
         if update_result.modified_count > 0:
             logger.info("Collection exists, count incremented")
