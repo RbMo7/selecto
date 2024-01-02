@@ -12,7 +12,7 @@ import product2Image from './Images/product2.jpeg';
 import product3Image from './Images/example.jpeg';
 import { useParams } from 'react-router-dom';
 
-
+import Landing from './Landing';
 
 // const user = {
 //     name: 'Saroj Poudel',
@@ -95,7 +95,7 @@ function Dashboard() {
       </div>
     </div>
 
-
+    <Landing/>
     <div className="tracked-products">
         <h2>Tracked Products</h2>
         <Slider {...settings}>
@@ -128,6 +128,7 @@ function Dashboard() {
           ))}
         </Slider>
       </div>
+      
   </div>  
   );
 }
