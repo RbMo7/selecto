@@ -202,7 +202,8 @@ def get_hot_products():
             current_collection = dbase[collection_name]
             res = current_collection.find_one()
             count = res['count']
-            collection_counts.append({'collection': collection_name, 'count': count})
+            img = res['product_img']
+            collection_counts.append({'collection': collection_name,'product_img': img, 'count': count})
 
         sorted_col = sorted(collection_counts, key=lambda x: x['count'], reverse=True)
         top_5_collections = sorted_col[:5]
