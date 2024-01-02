@@ -11,7 +11,9 @@ export default function About(props) {
     setShowRegisterModal(false);
   };
   return (
+    
     <Container className="py-5">
+      
       <Row>
         <Col className="text-center">
           <h1 className="display-4" style={{ fontWeight: "bold" }}>
