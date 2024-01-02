@@ -271,6 +271,7 @@ def get_reviews_amazon():
     logger.info(f"Time: {end - start}")
 
 def after_func(keyword, scraping_done_event, results):
+    global count
     global driver
     global start
     driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
@@ -304,14 +305,24 @@ def after_func(keyword, scraping_done_event, results):
 
     list_of_collections = dbase.list_collection_names()
     if title.text in list_of_collections:
-        logger.info("Collection exists")
-        scraping_done_event.set()
-        return title.text
+        collection_name = dbase[title.text]
+        # Assuming 'count' is the field you want to update
+        filter_criteria = {}  # Provide a filter criteria based on your document structure
+
+        # Update the 'count' field using $inc to increment the value
+        update_result = collection_name.update_one(filter_criteria, {"$inc": {"count": 1}})
+
+        if update_result.modified_count > 0:
+            logger.info("Collection exists, count incremented")
+            scraping_done_event.set()
+            return title.text
+        else:
+            logger.warning("Collection exists, but count not updated")
     else:
         logger.info("Collection does not exist")
-
+    count = 1
     collection_name = dbase[title.text]
-    title_data = {"product_name": title.text, "product_img": img_link}
+    title_data = {"product_name": title.text, "product_img": img_link, "count": count}
     logger.info(f"Product Web Link: {web}")
 
     driver.get(web)
