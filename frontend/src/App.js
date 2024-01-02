@@ -6,6 +6,7 @@ import About from "./Components/About";
 import NotFound from "./Components/NotFound";
 import ProductDetails from "./Components/ProductDetails";
 import Dashboard from "./Components/dashboard";
+import SimpleSlider from "./Components/tracked";
 import { Toaster } from "react-hot-toast";
 import Protected from "./PrivateRoute";
 import React, { useState } from "react";
@@ -21,15 +22,26 @@ export default function App() {
         <Router>
           <Navbar isAuthenticated={isAuthenticated} setmodal={setmodal} />
           <Routes>
-            <Route path="/" element={<Landing  modal={modal} setmodal={setmodal} />} />
+            <Route
+              path="/"
+              element={<Landing modal={modal} setmodal={setmodal} />}
+            />
 
-            <Route path="/About" element={<About modal={modal} setmodal={setmodal}  />} />
-            <Route path="/productdetails" element={<ProductDetails modal={modal} setmodal={setmodal}  />} />
+            <Route
+              path="/About"
+              element={<About modal={modal} setmodal={setmodal} />}
+            />
+            <Route
+              path="/productdetails"
+              element={<ProductDetails modal={modal} setmodal={setmodal} />}
+            />
+            <Route path="/tracked" element={<SimpleSlider />} />
+
             <Route
               path="/dashboard/:id"
               element={
                 <Protected>
-                  <Dashboard modal={modal} setmodal={setmodal}  />
+                  <Dashboard modal={modal} setmodal={setmodal} />
                 </Protected>
               }
             />
