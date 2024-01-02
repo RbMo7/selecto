@@ -154,8 +154,7 @@
 .description-box,
 .review-box {
   padding: 10px;
-  box-sizing: border-box;
-  border: 1px solid #ddd; /* Add border for better separation */
+   /* Add border for better separation */
 }
 
 /* dashboard.css */
@@ -167,15 +166,15 @@ grid-gap: 50px;
 
 .dashboard-container {
   max-width: 100%; 
-  height: 100vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 15px 0px 15px 8px;
+  margin-left:20px;
+  margin-top: 15px;
   padding: 20px;
-  box-sizing: border-box;
-  border: 2px solid #ddd;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .userDetails {
@@ -186,7 +185,7 @@ grid-gap: 50px;
 }
 
 .userDetails img {
-  width: 80px;
+  width: 200px;
   height: auto;
   border-radius: 50%;
   margin-bottom: 10px; 
@@ -217,7 +216,8 @@ grid-gap: 50px;
 
 .tracked-products h2 {
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
 .tracked-products ul {
@@ -241,3 +241,10 @@ grid-gap: 50px;
   font-size: 18px;
   text-align: center;
  }
+
+ .slick-slide >div{
+  margin: 0 10px;
+ }  
+
+
+
