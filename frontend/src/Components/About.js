@@ -1,8 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import RegisterModal from "./RegisterModal";
+
+
 
 export default function About(props) {
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const handleRegisterModalShow = () => {
+    setShowRegisterModal(true);
+  };
+  const handleRegisterModalHide = () => {
+    setShowRegisterModal(false);
+  };
   return (
+    
     <Container className="py-5">
       <Row>
         <Col className="text-center">
@@ -53,7 +64,15 @@ export default function About(props) {
             <i>*Enjoy Exploring Products with Selecto*</i>
           </h1>
           <p className="lead">Ready to get started? Register now and embark on a journey of personalized product reviews!</p>
-          <button className="btn btn-primary">Sign Up</button>
+          <button className="btn btn-primary" onClick={
+            setShowRegisterModal
+          }>Sign Up</button>
+          <RegisterModal
+            show={showRegisterModal}
+            onHide={() => {
+              handleRegisterModalHide();
+              props.onHide(); // Close SignInModal when RegisterModal is closed
+            }}/>
         </Col>
       </Row>
     </Container>
