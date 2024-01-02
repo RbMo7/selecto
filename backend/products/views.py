@@ -42,7 +42,7 @@ def get_products(request, collection_name):
         database_name='Reviews'
         dbase = get_database(database_name)
         # print("yeta ta aayo")
-        # Dynamically set the collection name based on user input
+        # Dynamically set the collection name based     on user input
         collection = dbase[collection_name]
 
         # Fetch products from the specified collection
@@ -57,7 +57,7 @@ def get_products(request, collection_name):
     
     
 def nlp_view(request, product_name):
-
+    
     try:
         # Call the existing NLP processing function
         print("printing collection in views:", product_name)
