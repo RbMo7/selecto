@@ -197,7 +197,7 @@ def get_hot_products():
         dbase = get_database(database_name)
         list_of_collection = dbase.list_collection_names()
         collection_counts = []
-
+        
         for collection_name in list_of_collection:
             current_collection = dbase[collection_name]
             res = current_collection.find_one()

@@ -78,9 +78,7 @@ function Dashboard() {
   return (
     <>
     <div className="container-dash">
-      <div className="search-container">
-        <Search />
-      </div>
+      
       <div className="dashboard-container">
         <div className="userDetails">
           <img src={test} alt="Product Image" style={{ maxWidth: '100%' }} />
@@ -104,7 +102,9 @@ function Dashboard() {
         <p>Write anything about users... </p>
       </div>
     </div>
-
+    <div className="search-container">
+        <Search />
+      </div>
     
     <div className="tracked-products">
         <h2>Tracked Products</h2>
