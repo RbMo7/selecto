@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import ProductCard from "./Card";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 // import ProductDetail from "./ProductDetails";
 
 function ProductListModal({ productData, show, onHide }) {
@@ -13,6 +14,11 @@ function ProductListModal({ productData, show, onHide }) {
 
   const handleButtonClick = () => {
     navigate("/productdetails"); // Use history.push to navigate
+  };
+
+  const handleNoClick=() => {
+    onHide();
+    toast("Try searching for your desired product again");
   };
 
   // Using useEffect to fetch data when the component mounts
@@ -77,7 +83,7 @@ function ProductListModal({ productData, show, onHide }) {
           Yes
         </button>
 
-        <button type="button" class="btn btn-dark">
+        <button type="button" onClick={handleNoClick} class="btn btn-dark">
           No
         </button>
       </Modal.Footer>

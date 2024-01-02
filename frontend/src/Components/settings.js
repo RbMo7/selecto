@@ -5,28 +5,78 @@ import "../App.css";
 import img from "./Images/defaultuser.png";
 import Upload from "./Images/Upload-icon.png";
 import { NavLink } from "react-router-dom";
-
-
+import { useNavigate } from "react-router-dom";
 
 function Settings() {
   const id = localStorage.getItem("access_token");
-  const [username, setusername] = useState("");
-  const [useremail, setuseremail] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [imgSrc, setImgSrc] = useState("img");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/selecto/api/userdetails/${id}/`);
-        setusername(response.data.user['name']); // Update state with username
-        setuseremail(response.data.user['email']);
+        const response = await axios.get(
+          `http://127.0.0.1:8000/selecto/api/userdetails/${id}/`
+        );
+        console.log("API Response:", response.data);
+        setName(response.data.user["name"]); // Update state with username
+        setEmail(response.data.user["email"]);
+        // setImgSrc(response.data.user["profile_image"]);
+        // console.log(imgSrc);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
 
     fetchUserData();
-  }, [id]); 
+  }, [id]);
 
+  const handleSubmit = async (e) => {
+    console.log("yeta aayo");
+    e.preventDefault();
+
+    try {
+      const updatedUserDetails = {
+        id,
+        name,
+        email
+      };
+
+      // Send the updated user details to the backend API
+      const { data } = await axios.patch(
+        `http://127.0.0.1:8000/selecto/api/update_userdetails/${id}/`,
+        { updatedUserDetails }
+      );
+
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        toast.success("Information Updated Successfully");
+        navigate(`/dashboard/${id}`);
+      }
+    } catch (error) {
+      // Display error message received from the backend
+      const errorMessage = error.response.data.message;
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0]; // Get the selected file
+    if (file) {
+      // Create a FileReader object
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        // Update the image source with the selected file
+        setImgSrc(reader.result);
+      };
+
+      reader.readAsDataURL(file); // Read the file as data URL
+    }
+  };
 
   return (
     <>
@@ -41,7 +91,7 @@ function Settings() {
                 <NavLink
                   className="nav-link "
                   style={{ font: "Montserrat", fontSize: 30 }}
-                  to={`/Dashboard/settings/${id}`}
+                  to={`/Dashboard/${id}/settings`}
                 >
                   My Profile
                 </NavLink>
@@ -73,7 +123,7 @@ function Settings() {
           <div className="col-md-6 ">
             <div className="circle ">
               <img
-                src={img}
+                src={imgSrc}
                 alt="Logo"
                 className="logo-image "
                 height="200px"
@@ -95,33 +145,33 @@ function Settings() {
                 id="upload-input"
                 type="file"
                 accept="image/*"
-                // onChange={handleImageUpload}
+                onChange={handleImageUpload}
                 style={{ display: "none" }}
               />
             </label>
 
             <br />
-            {/* <form className="quicksand15" onSubmit={handleSubmit}> */}
-            <form className="quicksand15">
+            <form className="quicksand15" onSubmit={handleSubmit}>
+              {/* <form className="quicksand15"> */}
               <strong>
                 <label htmlFor="Name" className="form-label">
                   FullName
                 </label>
                 <input
-                  onChange={(e) => setusername(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
                   className=" form-control"
                   id="Name"
-                  value={username}
+                  value={name}
                 />
-                <br/>
+                <br />
                 <label htmlFor="email" className="form-label">
                   E-mail
                 </label>
                 <input
-                  value={useremail}
+                  value={email}
                   required
-                  onChange={(e) => setuseremail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="text"
                   id="email"
                   className=" form-control"
@@ -129,7 +179,8 @@ function Settings() {
 
                 <br />
                 <button
-                  type="button"
+                  type="submit"
+                  onClick={handleSubmit}
                   className="btn btn-success btn-lg"
                   // onClick={() => props.setmodal1(true)}
                 >
