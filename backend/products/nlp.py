@@ -175,8 +175,8 @@ def process_nlp_collection(title):
         data = []
 
         for ObjectId, group in df.groupby("_id"):
-            row_total = group['roberta_neg'].sum(
-            ) + group['roberta_neu'].sum() + group['roberta_pos'].sum()
+            row_total = group['roberta_pos'].sum(
+            ) + group['roberta_neu'].sum() + group['roberta_neg'].sum()
 
             if row_total > 0:
                 positive_percentage = (

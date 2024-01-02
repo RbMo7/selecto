@@ -35,7 +35,7 @@ def summarize(title):
     nltk.download('stopwords')
     nltk.download('punkt')
 
-    reviews_cursor = collection.find().skip(2).limit(4)
+    reviews_cursor = collection.find().skip(2)
     reviews = [review['Review'] for review in reviews_cursor]
 
     text = " ".join(reviews)

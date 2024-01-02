@@ -281,3 +281,21 @@ grid-gap: 50px;
   border-radius: 100%;
 }
 
+
+/* HotProducts */
+.hot-product-list {
+  display: flex;
+  justify-content:space-evenly; /* Adjust as needed */
+  align-items: center; /* Adjust as needed */
+  flex-wrap: wrap; /* Allows items to wrap to the next row if needed */
+}
+
+.hot-product {
+  /* Add styling for individual products if needed */
+  margin: 2px; /* Adjust as needed */
+  /* ... other styles */
+}
+
+.hotProducts-edit{
+  text-align: center;
+}

@@ -275,7 +275,7 @@ def after_func(keyword, scraping_done_event, results):
     global count
     global driver
     global start
-    driver.get_screenshot_as_file("screenshot.png")
+    # driver.get_screenshot_as_file("screenshot.png")
     driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
@@ -327,7 +327,7 @@ def after_func(keyword, scraping_done_event, results):
 
     driver.get(web)
     captcha_solver()
-    driver.get_screenshot_as_file("screenshot.png")
+    # driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
     count = 1
     temp = 0
