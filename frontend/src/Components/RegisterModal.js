@@ -1,103 +1,126 @@
-import React, { useEffect, useState } from "react";
+// RegisterModal.js
+import React, { useState } from "react";
+import { Modal, Button, Form, Image, Col } from "react-bootstrap";
+// import selectoLogo from "./Images/logotext.png";
+import selectoLogo from "./Images/Logo-NObg.png";
+import SignInModal from "./SignInModal";
+import toast from "react-hot-toast";
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
+function RegisterModal(props) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showSignInModal, setShowSignInModal] = React.useState(false);
 
-const ProductDetail = () => {
-  const [loading, setLoading] = useState(true);
-  const [negative, setNegative] = useState("");
-  const [positive, setPositive] = useState("");
-  const [neutral, setNeutral] = useState("");
-  const [summary, setSummary] = useState("");
+  const handleSignInModalShow = () => {
+    setShowSignInModal(true);
+  };
 
-  const productName = localStorage.getItem("productName");
-  const productImg = localStorage.getItem("productImg");
+  const handleSignInModalHide = () => {
+    setShowSignInModal(false);
+  };
 
-  window.addEventListener("beforeunload", () => {
-    localStorage.removeItem("productName");
-    localStorage.removeItem("productImage");
-  });
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    const apiUrl = "http://127.0.0.1:8000/selecto/api/nlp_view/";
+    const userData = { name, email, password };
+    // Input validation
+    if (!email || !password || !name) {
+      // Show an error message or prevent the request
+      console.error("Empty Fields");
+      toast.error("Don't leave empty fields");
+      return;
+    }
 
-    axios
-      .get(`${apiUrl}${productName}/`)
-      .then((response) => {
-        const values = response.data.nlp;
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/selecto/api/register/",
+        { userData }
+      );
 
-        const avgNegative = values[0];
-        const avgNeutral = values[1];
-        const avgPositive = values[2];
-        const summary = values[3];
-
-        setNegative(avgNegative);
-        setPositive(avgPositive);
-        setNeutral(avgNeutral);
-        setSummary(summary);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [productName]);
+      if (!data.error) {
+        toast.success("Registered successfully. Proceed to Login");
+        setShowSignInModal(true);
+      } else {
+        toast.error(data.error);
+      }
+    } catch (error) {
+      console.error("Error sending search request:", error);
+      toast.error("An error occurred ", error);
+    }
+  };
 
   return (
-    <Container className="mt-4">
-      <Row>
-        <Col md={8}>
-          <div className="card">
-            <div className="card-body">
-              <h1>{productName}</h1>
-              <div className="photo-box">
-                <img
-                  src={productImg}
-                  alt=""
-                  className="img-fluid"
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-              </div>
-            </div>
-          </div>
-        </Col>
-        <Col md={4}>
-          <div className="card">
-            <div className="card-body">
-              <h3>Customer Reviews :</h3>
-              {loading ? (
-                // Replace Spinner with a calculating animation
-                <div className="calculation-animation" />
-              ) : (
-                <>
-                  <p>Negative : {negative}</p>
-                  <p>Positive : {positive}</p>
-                  <p>Neutral : {neutral}</p>
-                </>
-              )}
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={12} className="mt-3">
-          <div className="card">
-            <div className="card-body">
-              <h3>Summary:</h3>
-              {loading ? (
-                // Replace Spinner with a calculating animation
-                <div className="calculation-animation" />
-              ) : (
-                <p>{summary}</p>
-              )}
-            </div>
-          </div>
-        </Col>
-      </Row>
-    </Container>
-  );
-};
+    <Modal
+      {...props}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      className="glassMorphism" // Apply the glass morphism class
+    >
+      <Modal.Header closeButton>
+        <Modal.Title className="text-center w-100">Register</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="text-center">
+        <Image
+          src={selectoLogo}
+          alt="Selecto Logo"
+          width="200"
+          height="200"
+          className="mb-3"
+        />
+        <Form onSubmit={handleRegister}>
+          <Form.Group as={Col} controlId="formGridName">
+            <Form.Control
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              type="text"
+              placeholder="Enter your name"
+            />
+          </Form.Group>
+          <br />
+          <Form.Group as={Col} controlId="formGridEmail">
+            <Form.Control
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              type="email"
+              placeholder="Enter your email"
+            />
+          </Form.Group>
+          <br />
 
-export default ProductDetail;
+          <Form.Group className="mb-3" controlId="formGridPassword">
+            <Form.Control
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              type="password"
+              placeholder="Create a password"
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit" block>
+            Register
+          </Button>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <p className="text-muted">
+          Already have an account?{" "}
+          <Button variant="link" onClick={handleSignInModalShow}>
+            Sign In
+          </Button>
+        </p>
+      </Modal.Footer>
+      <SignInModal
+        show={showSignInModal}
+        onHide={() => {
+          handleSignInModalHide();
+          props.onHide(); // Close RegisterModal when SignInModal is closed
+        }}
+      />
+    </Modal>
+  );
+}
+
+export default RegisterModal;
