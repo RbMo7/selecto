@@ -238,6 +238,7 @@ def initialize_driver():
     chrome_options.add_experimental_option(
         "prefs", {"profile.managed_default_content_settings.images": 2}
     )
+    # chrome_options.add_argument('--blink-settings=imagesEnabled=false')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument('--ignore-certificate-errors')
@@ -273,6 +274,7 @@ def get_reviews_amazon():
 def after_func(keyword, scraping_done_event, results):
     global driver
     global start
+    driver.get_screenshot_as_file("screenshot.png")
     driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
@@ -325,9 +327,12 @@ def after_func(keyword, scraping_done_event, results):
     try:
         collection_name.insert_one(title_data)
         while True:
-            items = WebDriverWait(driver, 10).until(
+            try:
+                items = WebDriverWait(driver, 10).until(
                 EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "a-row a-spacing-small review-data")]'))
             )
+            except:
+                return title.text
             for item in items:
                 review = item.find_element(By.XPATH, './/span[@class="a-size-base review-text review-text-content"]')
                 temp += 1
