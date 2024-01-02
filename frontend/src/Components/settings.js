@@ -11,7 +11,7 @@ function Settings() {
   const id = localStorage.getItem("access_token");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [imgSrc, setImgSrc] = useState("img");
+  const [imgSrc, setImgSrc] = useState(img);
   const navigate = useNavigate();
 
   useEffect(() => {

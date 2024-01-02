@@ -6,7 +6,6 @@ function Landing(props) {
   return (
     <Container className="text-center my-5">
       <Search />
-
       <Row className="gx-3">
         <Col md={6} className="mb-5">
           <div className="p-4 rounded border border-primary">
