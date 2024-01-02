@@ -12,6 +12,7 @@ import Protected from "./PrivateRoute";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Search from "./Components/search";
+import Settings from "./Components/settings";
 
 export default function App() {
   const [modal, setmodal] = useState(false);
@@ -46,6 +47,15 @@ export default function App() {
               element={
                 <Protected>
                   <Dashboard modal={modal} setmodal={setmodal} />
+                </Protected>
+              }
+            />
+
+            <Route
+              path="/dashboard/:id/settings"
+              element={
+                <Protected>
+                  <Settings modal={modal} setmodal={setmodal} />
                 </Protected>
               }
             />

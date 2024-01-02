@@ -9,8 +9,8 @@ import "slick-carousel/slick/slick-theme.css";
 
 import product1Image from './Images/product1.jpeg';
 import product2Image from './Images/product2.jpeg';
-import product3Image from './Images/example.jpeg';
-import { useParams } from 'react-router-dom';
+// import product3Image from './Images/example.jpeg';
+// import { useParams } from 'react-router-dom';
 import Search from './search';
 
 import Landing from './Landing';
