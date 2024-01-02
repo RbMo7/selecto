@@ -44,9 +44,9 @@ const ProductDetail = () => {
         const avgPositive = values[2];
         const Summary = values[3];
 
-        setNegative(avgNeutral)
-        setPositive(avgNegative)
-        setNeutral(avgPositive)
+        setNegative(avgNegative)
+        setPositive(avgPositive)
+        setNeutral(avgNeutral)
         setSummary(Summary)
   
         console.log('Average Negative:', avgNeutral);

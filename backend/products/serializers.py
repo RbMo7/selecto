@@ -23,3 +23,13 @@ class UserSerializer(serializers.Serializer):
             'name': instance.get('name'),
             'email': instance.get('email'),
         }
+    
+
+class TopCollectionSerializer(serializers.Serializer):
+    collection = serializers.CharField()
+    count = serializers.IntegerField()
+
+class TopCollectionsResponseSerializer(serializers.Serializer):
+    top_collections = TopCollectionSerializer(many=True)
+    def to_representation(self, instance):
+        return {'top_collections': instance['top_collections']}

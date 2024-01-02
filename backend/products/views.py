@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
-from .serializers import ProductSerializer, UserSerializer
+from .serializers import ProductSerializer, UserSerializer, TopCollectionsResponseSerializer
 from .database import get_database
 import bcrypt
 from .nlp import process_nlp_collection
@@ -60,10 +60,10 @@ def nlp_view(request, product_name):
     try:
         # Call the existing NLP processing function
         print("printing collection in views:", product_name)
-        avg_negative, avg_neutral, avg_positive = process_nlp_collection(product_name)
+        avg_positive, avg_negative, avg_neutral = process_nlp_collection(product_name)
         summary = summarize(product_name)
 
-        nlp=[avg_negative, avg_neutral, avg_positive,summary]
+        nlp=[avg_positive, avg_negative, avg_neutral,summary]
         
         print (avg_negative)
         print (avg_neutral)
@@ -190,6 +190,36 @@ def signin_user(request):
         return JsonResponse({'error': 'Internal server error'})
 
     return JsonResponse({'error': 'Invalid request method'})
+# Your utility function to get hot products
+def get_hot_products():
+    try:
+        database_name = 'Reviews'
+        dbase = get_database(database_name)
+        list_of_collection = dbase.list_collection_names()
+        collection_counts = []
+
+        for collection_name in list_of_collection:
+            current_collection = dbase[collection_name]
+            res = current_collection.find_one()
+            count = res['count']
+            collection_counts.append({'collection': collection_name, 'count': count})
+
+        sorted_col = sorted(collection_counts, key=lambda x: x['count'], reverse=True)
+        top_5_collections = sorted_col[:5]
+
+        return {'top_collections': top_5_collections}
+
+    except Exception as e:
+        return {'error': str(e)}
+
+
+# Your DRF view for hot products
+@api_view(['GET'])
+def hot_products(request):
+    hot_products_data = get_hot_products()
+    serializer = TopCollectionsResponseSerializer(hot_products_data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 @api_view(['GET'])
 def get_user_details(request, user_id):
@@ -210,8 +240,9 @@ def get_user_details(request, user_id):
 
         # Serialize the data using UserSerializer
         serializer = UserSerializer(user)
-
-        return Response({'user': serializer.data})
+        hot_products_data = get_hot_products()
+        return Response({'user': serializer.data, 'hot_products': hot_products_data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
+

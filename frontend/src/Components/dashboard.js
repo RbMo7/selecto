@@ -6,14 +6,15 @@ import test from './Images/example.jpeg';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-
+import HotProduct from './hotProducts'
 import product1Image from './Images/product1.jpeg';
 import product2Image from './Images/product2.jpeg';
 import product3Image from './Images/example.jpeg';
 import { useParams } from 'react-router-dom';
 import Search from './search';
-
+import ProductCard from './Card'
 import Landing from './Landing';
+import HotProductList from './hotProducts';
 
 // const user = {
 //     name: 'Saroj Poudel',
@@ -66,6 +67,7 @@ function Dashboard() {
 
 
   return (
+    <>
     <div className="container-dash">
       <div className="search-container">
         <Search />
@@ -128,7 +130,9 @@ function Dashboard() {
         </Slider>
       </div>
       
-  </div>  
+  </div>
+  <HotProductList/>  
+  </>
   );
 }
 
