@@ -17,8 +17,6 @@ from bson import ObjectId
 
 # Get the database
 
-
-
 def search_and_scrape(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -40,7 +38,6 @@ def search_and_scrape(request):
 @api_view(['GET'])
 def get_products(request, collection_name):
     try:
-        print("yeta aayooooooooooooooooooooo")
         database_name='Reviews'
         dbase = get_database(database_name)
         # print("yeta ta aayo")
