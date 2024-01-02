@@ -246,6 +246,42 @@ grid-gap: 50px;
   margin: 0 10px;
  }  
 
+/* settings.js */
+.SettingsItem {
+  margin-top: 50%;
+}
+
+.fixx {
+  max-height: 400px;
+}
+
+.small {
+  max-width: 10px;
+}
+.shift{
+  margin-left: 120px;
+  transform: translateY(-60%);
+}
+.gap{
+  margin-top:2%;
+}
+.circle{
+  display: block;
+  height: 200px;
+  width: 200px;
+  border-radius: 100%;
+}
+
+
+.logo-image {
+  display: block;
+  margin: auto;
+  height: 200px;
+  width: 200px;
+  border-radius: 100%;
+}
+
+
 /* HotProducts */
 .hot-product-list {
   display: flex;

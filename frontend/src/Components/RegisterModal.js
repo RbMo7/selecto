@@ -58,7 +58,6 @@ function RegisterModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       className="glassMorphism" // Apply the glass morphism class
-
     >
       <Modal.Header closeButton>
         <Modal.Title className="text-center w-100">Register</Modal.Title>
