@@ -48,7 +48,7 @@ function Dashboard() {
             <h5> <b>Welcome!</b> {user.name}</h5>
           </div>
           <div className="user-name">
-            <h5>{user.username}</h5>
+            <h5><b>@</b>{user.username}</h5>
           </div>
           <div className="user-email">
             <h5>{user.email}</h5>
@@ -96,14 +96,9 @@ function Dashboard() {
           ))}
         </Slider>
       </div>
-
-  </div> 
+  </div>  
   );
 }
-
-
-
-
 
 
 export default Dashboard;
