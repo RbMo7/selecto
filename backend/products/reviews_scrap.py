@@ -238,6 +238,7 @@ def initialize_driver():
     chrome_options.add_experimental_option(
         "prefs", {"profile.managed_default_content_settings.images": 2}
     )
+    # chrome_options.add_argument('--blink-settings=imagesEnabled=false')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument('--ignore-certificate-errors')
@@ -271,8 +272,10 @@ def get_reviews_amazon():
     logger.info(f"Time: {end - start}")
 
 def after_func(keyword, scraping_done_event, results):
+    global count
     global driver
     global start
+    driver.get_screenshot_as_file("screenshot.png")
     driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
@@ -304,14 +307,24 @@ def after_func(keyword, scraping_done_event, results):
 
     list_of_collections = dbase.list_collection_names()
     if title.text in list_of_collections:
-        logger.info("Collection exists")
-        scraping_done_event.set()
-        return title.text
+        collection_name = dbase[title.text]
+        # Assuming 'count' is the field you want to update
+        filter_criteria = {}  # Provide a filter criteria based on your document structure
+
+        # Update the 'count' field using $inc to increment the value
+        update_result = collection_name.update_one(filter_criteria, {"$inc": {"count": 1}})
+
+        if update_result.modified_count > 0:
+            logger.info("Collection exists, count incremented")
+            scraping_done_event.set()
+            return title.text
+        else:
+            logger.warning("Collection exists, but count not updated")
     else:
         logger.info("Collection does not exist")
-
+    count = 1
     collection_name = dbase[title.text]
-    title_data = {"product_name": title.text, "product_img": img_link}
+    title_data = {"product_name": title.text, "product_img": img_link, "count": count}
     logger.info(f"Product Web Link: {web}")
 
     driver.get(web)
@@ -325,9 +338,12 @@ def after_func(keyword, scraping_done_event, results):
     try:
         collection_name.insert_one(title_data)
         while True:
-            items = WebDriverWait(driver, 10).until(
+            try:
+                items = WebDriverWait(driver, 10).until(
                 EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "a-row a-spacing-small review-data")]'))
             )
+            except:
+                return title.text
             for item in items:
                 review = item.find_element(By.XPATH, './/span[@class="a-size-base review-text review-text-content"]')
                 temp += 1

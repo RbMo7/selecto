@@ -137,13 +137,14 @@ def process_nlp_collection(title):
     collection_nlp = dbase_nlp["results"]
     # db=connectdb()
     db = client['Reviews']
-    
-    if title in collection_nlp.find({},{ "title" : title }):
+    res = collection_nlp.find_one({"title": title})
+    if res:
         logger.info("collection exists")
-        
-        res = collection_nlp.find({},{"title": title})
         end = time.time()
         print("time when in database : ", end - start)
+        print(res)
+        
+        # print(res.get('positive'), res.get('negative'), res.get('neutral'))
         return res['positive'], res['negative'], res['neutral']
 
         
