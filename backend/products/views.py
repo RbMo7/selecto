@@ -5,11 +5,13 @@ import json
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 from .serializers import ProductSerializer, UserSerializer
 from .database import get_database
 import bcrypt
 from .nlp import process_nlp_collection
 from .summaryfinal import summarize
+from bson import ObjectId
 # from .Nlpfinal import get_data_from_mongodb, tokenize_and_analyze_sentiment, analyze_with_roberta, get_summary, cut_text_into_sentences
 # from .scraping import scraping_thread
 
@@ -185,22 +187,26 @@ def signin_user(request):
 
     return JsonResponse({'error': 'Invalid request method'})
 
-def get_user_details(user_id):
+@api_view(['GET'])
+def get_user_details(request, user_id):
     try:
-        print("yeta aayooooooooooooooooooooo part 2")
-        database_name='Users'
+        database_name = 'Users'
         dbase = get_database(database_name)
-        
+
         # Dynamically set the collection name based on user input
         collection = dbase["userInfo"]
 
-        # Fetch products from the specified collection
-        user = list(collection.find())
+        # Fetch user from the specified collection
+        print("user id is:", user_id)
+        user = collection.find_one({"_id": ObjectId(user_id)})
+        print("naam ho:", user)
 
-        # Serialize the data using ProductSerializer
-        serializer = UserSerializer(user, many=True)
+        if not user:
+            return JsonResponse({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize the data using UserSerializer
+        serializer = UserSerializer(user)
 
         return Response({'user': serializer.data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return True
