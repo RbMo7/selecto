@@ -1,8 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import RegisterModal from "./RegisterModal";
-
-
 
 export default function About(props) {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -13,13 +11,15 @@ export default function About(props) {
     setShowRegisterModal(false);
   };
   return (
-    
     <Container className="py-5">
       <Row>
         <Col className="text-center">
-          <h1 className="display-4" style={{ fontWeight: "bold" }}>Discover the World of Selecto</h1>
+          <h1 className="display-4" style={{ fontWeight: "bold" }}>
+            Discover the World of Selecto
+          </h1>
           <p className="lead">
-            Welcome to Selecto! Your personalized gateway to a world of curated product recommendations.
+            Welcome to Selecto! Your personalized gateway to a world of curated
+            product recommendations.
           </p>
         </Col>
       </Row>
@@ -30,7 +30,9 @@ export default function About(props) {
             <h2>Our Mission</h2>
             <hr />
             <p>
-              At Selecto, we aim to simplify your product selection journey by providing personalized and an honest reviews on the products you want to buy.
+              At Selecto, we aim to simplify your product selection journey by
+              providing personalized and an honest reviews on the products you
+              want to buy.
             </p>
           </div>
         </Col>
@@ -40,7 +42,9 @@ export default function About(props) {
             <h2>Features</h2>
             <hr />
             <p>
-              Explore a range of features designed to enhance your product discovery experience. Get a trustworthy review, and decide on whether you want to buy the product or not.
+              Explore a range of features designed to enhance your product
+              discovery experience. Get a trustworthy review, and decide on
+              whether you want to buy the product or not.
             </p>
           </div>
         </Col>
@@ -50,7 +54,9 @@ export default function About(props) {
             <h2>Future Plans</h2>
             <hr />
             <p>
-              Exciting plans ahead! We're integrating with renowned tracking services and building a community of people who are scared that they will get scammed online. Stay tuned for updates!
+              Exciting plans ahead! We're integrating with renowned tracking
+              services and building a community of people who are scared that
+              they will get scammed online. Stay tuned for updates!
             </p>
           </div>
         </Col>
@@ -63,16 +69,20 @@ export default function About(props) {
           <h1 className="display-4">
             <i>*Enjoy Exploring Products with Selecto*</i>
           </h1>
-          <p className="lead">Ready to get started? Register now and embark on a journey of personalized product reviews!</p>
-          <button className="btn btn-primary" onClick={
-            setShowRegisterModal
-          }>Sign Up</button>
+          <p className="lead">
+            Ready to get started? Register now and embark on a journey of
+            personalized product reviews!
+          </p>
+          <button className="btn btn-primary" onClick={setShowRegisterModal}>
+            Sign Up
+          </button>
           <RegisterModal
             show={showRegisterModal}
             onHide={() => {
               handleRegisterModalHide();
               props.onHide(); // Close SignInModal when RegisterModal is closed
-            }}/>
+            }}
+          />
         </Col>
       </Row>
     </Container>
