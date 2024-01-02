@@ -11,3 +11,15 @@ class ProductSerializer(serializers.Serializer):
             'product_img': instance.get('product_img'),
             "product_price": instance.get('product_price')
         }
+
+
+class UserSerializer(serializers.Serializer):
+    product_name = serializers.CharField()
+    product_img = serializers.URLField()
+    user_name = serializers.CharField()
+    user_email = serializers.CharField()
+    def to_representation(self, instance):
+        return {
+            'user_name': instance.get('user_name'),
+            'user_email': instance.get('user_email'),
+        }

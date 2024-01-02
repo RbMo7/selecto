@@ -5,7 +5,7 @@ import json
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, UserSerializer
 from .database import get_database
 import bcrypt
 from .nlp import process_nlp_collection
@@ -62,16 +62,23 @@ def nlp_view(request, product_name):
         # Call the existing NLP processing function
         print("printing collection in views:", product_name)
         avg_negative, avg_neutral, avg_positive = process_nlp_collection(product_name)
+        summary = summarize(product_name)
+
+        nlp=[avg_negative, avg_neutral, avg_positive,summary]
+        
+        print (avg_negative)
+        print (avg_neutral)
+        print (avg_positive)
+        print (nlp)
 
         # Return the results as JSON
         return JsonResponse({
-            'average_negative': avg_negative,
-            'average_neutral': avg_neutral,
-            'average_positive': avg_positive,
+            'nlp': nlp
         })
     except Exception as e:
         # Handle any exceptions and return an error response
         return JsonResponse({'error': str(e)}, status=500)
+
     
 def get_summary_text(request, product_name):
 
@@ -185,3 +192,22 @@ def signin_user(request):
 
     return JsonResponse({'error': 'Invalid request method'})
 
+def get_user_details(user_id):
+    try:
+        print("yeta aayooooooooooooooooooooo part 2")
+        database_name='Users'
+        dbase = get_database(database_name)
+        
+        # Dynamically set the collection name based on user input
+        collection = dbase["userInfo"]
+
+        # Fetch products from the specified collection
+        user = list(collection.find())
+
+        # Serialize the data using ProductSerializer
+        serializer = UserSerializer(user, many=True)
+
+        return Response({'user': serializer.data})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
