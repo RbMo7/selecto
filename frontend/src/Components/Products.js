@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import ProductCard from "./Card";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+// import ProductDetail from "./ProductDetails";
 
 function ProductListModal({ productData, show, onHide }) {
   const [products, setProducts] = useState([]);
@@ -12,7 +12,7 @@ function ProductListModal({ productData, show, onHide }) {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate("/productdetails"  ); // Use history.push to navigate
+    navigate("/productdetails"); // Use history.push to navigate
   };
 
   // Using useEffect to fetch data when the component mounts
@@ -32,11 +32,15 @@ function ProductListModal({ productData, show, onHide }) {
         // Update the state with the fetched products
         console.log(filteredProducts);
         setProducts(filteredProducts);
-        const productNames = filteredProducts.map(product => product.product_name);
-        const productImg = filteredProducts.map(product => product.product_img);
+        const productNames = filteredProducts.map(
+          (product) => product.product_name
+        );
+        const productImg = filteredProducts.map(
+          (product) => product.product_img
+        );
         console.log(productNames);
-        localStorage.setItem("productName", productNames)
-        localStorage.setItem("productImg", productImg)
+        localStorage.setItem("productName", productNames);
+        localStorage.setItem("productImg", productImg);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -72,6 +76,7 @@ function ProductListModal({ productData, show, onHide }) {
         >
           Yes
         </button>
+
         <button type="button" class="btn btn-dark">
           No
         </button>
