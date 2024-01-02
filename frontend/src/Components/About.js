@@ -82,7 +82,9 @@ export default function About(props) {
             show={showRegisterModal}
             onHide={() => {
               handleRegisterModalHide();
-              props.onHide(); // Close SignInModal when RegisterModal is closed
+              if (typeof props.onHide === 'function') {
+                props.onHide(); // Close SignInModal when RegisterModal is closed
+              } // Close SignInModal when RegisterModal is closed
             }}
           />
         </Col>
