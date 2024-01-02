@@ -5,7 +5,7 @@ import json
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, UserSerializer
 from .database import get_database
 import bcrypt
 from .nlp import process_nlp_collection
@@ -185,3 +185,22 @@ def signin_user(request):
 
     return JsonResponse({'error': 'Invalid request method'})
 
+def get_user_details(user_id):
+    try:
+        print("yeta aayooooooooooooooooooooo part 2")
+        database_name='Users'
+        dbase = get_database(database_name)
+        
+        # Dynamically set the collection name based on user input
+        collection = dbase["userInfo"]
+
+        # Fetch products from the specified collection
+        user = list(collection.find())
+
+        # Serialize the data using ProductSerializer
+        serializer = UserSerializer(user, many=True)
+
+        return Response({'user': serializer.data})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return True
