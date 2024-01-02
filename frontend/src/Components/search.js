@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import ProductListModal from "./Products";
 import Loading from "./Loading"; // Import the Loading component
 
-function Landing(props) {
+function Search(props) {
   const [searchText, setSearchText] = useState("");
   const [productName, setProductName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -74,27 +74,7 @@ function Landing(props) {
         </Button>
       </Form>
 
-      <Row className="gx-3">
-        <Col md={6} className="mb-5">
-          <div className="p-4 rounded border border-primary">
-            <h2 className="text-primary">Discover the Best Products</h2>
-            <p className="lead">
-              Find the products you love with personalized recommendations
-              tailored just for you.
-            </p>
-          </div>
-        </Col>
-        <Col md={6} className="mb-5">
-          <div className="p-4 rounded border border-primary">
-            <h2 className="text-primary">Easy and Quick</h2>
-            <p className="lead">
-              Effortlessly explore and search for products to enhance your
-              shopping experience.
-            </p>
-          </div>
-        </Col>
-      </Row>
-      
+    
       {loading ? (
         <Loading />
       ) : productName ? (
@@ -110,4 +90,4 @@ function Landing(props) {
   );
 }
 
-export default Landing;
+export default Search;

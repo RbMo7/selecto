@@ -11,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 import Protected from "./PrivateRoute";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Search from "./Components/search";
 
 export default function App() {
   const [modal, setmodal] = useState(false);
@@ -36,6 +37,9 @@ export default function App() {
               element={<ProductDetails modal={modal} setmodal={setmodal} />}
             />
             <Route path="/tracked" element={<SimpleSlider />} />
+
+            <Route path="/search" element={<Search />} />
+
 
             <Route
               path="/dashboard/:id"

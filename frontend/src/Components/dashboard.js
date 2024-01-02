@@ -11,6 +11,7 @@ import product1Image from './Images/product1.jpeg';
 import product2Image from './Images/product2.jpeg';
 import product3Image from './Images/example.jpeg';
 import { useParams } from 'react-router-dom';
+import Search from './search';
 
 import Landing from './Landing';
 
@@ -23,7 +24,7 @@ import Landing from './Landing';
 
   const trackedProducts = [
     { id: 1, name: 'Iphone 14 pro max', imageSrc: product1Image, price:'$99.99' ,description:'this is Iphone 14 pro max', reviews:'It is very good has quality camera'},
-    { id: 2, name: 'Iphone 14 pro max', imageSrc: product2Image, price:'$99.99' ,description:'this is Iphone 14 pro max', reviews:'It is very good has quality camera'},
+    { id: 2, name: 'New Balance Shoes', imageSrc: product2Image, price:'$199.99' ,description:'this is very confortable and light to wear', reviews:''},
     // Add more tracked products with their image sources
   ];
 
@@ -55,11 +56,6 @@ function Dashboard() {
     fetchUserData();
   }, []); 
 
-
-
-
-  
-
   const settings = {
     dots: true,
     infinite: true,
@@ -71,6 +67,9 @@ function Dashboard() {
 
   return (
     <div className="container-dash">
+      <div className="search-container">
+        <Search />
+      </div>
       <div className="dashboard-container">
         <div className="userDetails">
           <img src={test} alt="Product Image" style={{ maxWidth: '100%' }} />
@@ -95,7 +94,7 @@ function Dashboard() {
       </div>
     </div>
 
-    <Landing/>
+    
     <div className="tracked-products">
         <h2>Tracked Products</h2>
         <Slider {...settings}>
