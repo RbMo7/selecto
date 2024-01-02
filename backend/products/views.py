@@ -44,7 +44,7 @@ def get_products(request, collection_name):
         database_name='Reviews'
         dbase = get_database(database_name)
         # print("yeta ta aayo")
-        # Dynamically set the collection name based on user input
+        # Dynamically set the collection name based     on user input
         collection = dbase[collection_name]
 
         # Fetch products from the specified collection
@@ -59,21 +59,28 @@ def get_products(request, collection_name):
     
     
 def nlp_view(request, product_name):
-
+    
     try:
         # Call the existing NLP processing function
         print("printing collection in views:", product_name)
         avg_negative, avg_neutral, avg_positive = process_nlp_collection(product_name)
+        summary = summarize(product_name)
+
+        nlp=[avg_negative, avg_neutral, avg_positive,summary]
+        
+        print (avg_negative)
+        print (avg_neutral)
+        print (avg_positive)
+        print (nlp)
 
         # Return the results as JSON
         return JsonResponse({
-            'average_negative': avg_negative,
-            'average_neutral': avg_neutral,
-            'average_positive': avg_positive,
+            'nlp': nlp
         })
     except Exception as e:
         # Handle any exceptions and return an error response
         return JsonResponse({'error': str(e)}, status=500)
+
     
 def get_summary_text(request, product_name):
 
@@ -210,3 +217,4 @@ def get_user_details(request, user_id):
         return Response({'user': serializer.data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
