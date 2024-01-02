@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Spinner } from "react-bootstrap"; // Import Spinner from Bootstrap
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
@@ -41,14 +41,14 @@ const ProductDetail = () => {
         console.error("Error fetching data:", error);
       })
       .finally(() => {
-        setLoading(false); // Set loading to false regardless of success or failure
+        setLoading(false);
       });
   }, [productName]);
 
   return (
-    <div className="container mt-4">
-      <div className="row">
-        <div className="col-md-8">
+    <Container className="mt-4">
+      <Row>
+        <Col md={8}>
           <div className="card">
             <div className="card-body">
               <h1>{productName}</h1>
@@ -57,8 +57,8 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-4">
+        </Col>
+        <Col md={4}>
           <div className="card">
             <div className="card-body">
               <h3>Customer Reviews :</h3>
@@ -71,17 +71,29 @@ const ProductDetail = () => {
                   <p>Negative : {negative}</p>
                   <p>Positive : {positive}</p>
                   <p>Neutral : {neutral}</p>
-                  <div className="review-box">
-                    <p>Summary:</p>
-                    <p>{summary}</p>
-                  </div>
                 </>
               )}
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12} className="mt-3">
+          <div className="card">
+            <div className="card-body">
+              <h3>Summary:</h3>
+              {loading ? (
+                <Spinner animation="border" role="status">
+                  <span className="sr-only">Loading...</span>
+                </Spinner>
+              ) : (
+                <p>{summary}</p>
+              )}
+            </div>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
