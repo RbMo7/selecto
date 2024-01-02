@@ -107,9 +107,14 @@ from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 from scipy.special import softmax
 import time
+from .database import get_database
+import logging
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def process_nlp_collection(title):
+
     start=time.time()
     uri = "mongodb+srv://selecto:DmdSvpAnRnudk1Zj@reviews-list.q56a6p2.mongodb.net/?retryWrites=true&w=majority"
     client = MongoClient(uri, server_api=ServerApi('1'))
@@ -127,10 +132,21 @@ def process_nlp_collection(title):
     nltk.download('vader_lexicon')
 
     print(title)
-
+    database_name = "nlp_result"
+    dbase_nlp = get_database(database_name)
+    collection_nlp = dbase_nlp["results"]
     # db=connectdb()
     db = client['Reviews']
-    collection_names = db.list_collection_names()
+    
+    if title in collection_nlp.find({},{ "title" : title }):
+        logger.info("collection exists")
+        
+        res = collection_nlp.find({},{"title": title})
+        end = time.time()
+        print("time when in database : ", end - start)
+        return res['positive'], res['negative'], res['neutral']
+
+        
     db = client['Reviews']
     collection = db[title]
     cursor = collection.find().limit(20)
@@ -186,6 +202,15 @@ def process_nlp_collection(title):
     average_positive = df_table["Positive (%)"].mean()
     end=time.time()
     total_time=end-start
+    
+    avg_document = {
+        'title': title,
+        'negative': average_negative,
+        'neutral': average_neutral,
+        'positive': average_positive
+    }
+    
+    collection_nlp.insert_one(avg_document)
     print ("total time for nlp :",total_time)
     print("Average Negative Percentage:", average_negative)
     print("Average Neutral Percentage:", average_neutral)

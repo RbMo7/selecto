@@ -22,7 +22,8 @@
 #     global dbase
 #     global start
 #     start = time.time()
-#     dbase = get_database('Reviews')
+#     database_name="Reviews"
+#     dbase = get_database(database_name)
 #     web = 'https://www.amazon.com'
 #     options = webdriver.ChromeOptions()
 #     options.add_argument('--headless')
@@ -197,9 +198,9 @@
 #     return value
 
 
-# # get_reviews_amazon()
-# # after_func("lenevo thinkpad")
-# # print(get_reviews_amazon("Forza Motorsport – Standard Edition – Xbox Series X"))
+# get_reviews_amazon()
+# after_func("lenevo thinkpad")
+# print(get_reviews_amazon("Forza Motorsport – Standard Edition – Xbox Series X"))
 
 
 
