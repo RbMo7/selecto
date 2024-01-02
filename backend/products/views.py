@@ -126,12 +126,15 @@ def register_user(request):
             hashed_password = bcrypt.hashpw(
                 password.encode('utf-8'), bcrypt.gensalt())
 
+            # Set a default image URL or binary data
+            default_image_url = 'C:\My Files\KU\4th sem\Project\selecto\frontend\src\Components\Images\defaultuser.png'
+            
             # Prepare the document to be inserted
             user_document = {
                 'name': name,
                 'email': email,
-                # Ensure to decode the hashed password
                 'password': hashed_password.decode('utf-8'),
+                'profile_image': default_image_url,  
             }
 
             # Insert the document into the 'userInfo' collection
@@ -244,5 +247,36 @@ def get_user_details(request, user_id):
         return Response({'user': serializer.data, 'hot_products': hot_products_data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+@api_view(['PATCH'])
+def update_userdetails(request, user_id):
+    try:
+        print("Updating user details")
+        data = json.loads(request.body.decode('utf-8'))
+        user_data = data.get('updatedUserDetails')
+        print(user_data)
+
+        # Select the database and collection
+        database_name = 'Users'
+        dbase = get_database(database_name)
+        collection = dbase["userInfo"]
+
+        # Extract the updated user details from the request data
+        updated_user_details = {
+            'name': user_data.get('name'),
+            'email': user_data.get('email'),
+            # Add other fields as needed
+        }
+        print(updated_user_details)
+
+        # Update user details in the collection
+        collection.update_one({"_id": ObjectId(user_id)}, {"$set": updated_user_details})
+
+        return Response({'message': 'User details updated successfully'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 

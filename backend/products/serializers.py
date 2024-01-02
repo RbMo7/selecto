@@ -18,10 +18,12 @@ class UserSerializer(serializers.Serializer):
     product_img = serializers.URLField()
     name = serializers.CharField()
     email = serializers.CharField()
+    profile_image = serializers.URLField()
     def to_representation(self, instance):
         return {
             'name': instance.get('name'),
             'email': instance.get('email'),
+            # 'profile_image': instance.get('profile_image', '')
         }
     
 
