@@ -2,3 +2,4 @@ node_modules/
 /.venv
 backend/__pycache__/
 products/__pycache__/
+backend/screenshot.png

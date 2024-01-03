@@ -14,7 +14,6 @@ function ProductCard({ product }) {
           <Col md={8}>
             <Card.Body>
               <Card.Title>{product_name}</Card.Title>
-              <Card.Text>description</Card.Text>
             </Card.Body>
           </Col>
         </Row>

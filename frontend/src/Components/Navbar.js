@@ -52,6 +52,13 @@ function BasicNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="ms-auto">
                     <Nav.Link
+                      href={`/dashboard/${userid}/settings`}
+                      className="ms-2 navbar-link"
+                    >
+                      Settings
+                    </Nav.Link>
+
+                    <Nav.Link
                       href="/"
                       onClick={() => {
                         localStorage.removeItem("access_token");

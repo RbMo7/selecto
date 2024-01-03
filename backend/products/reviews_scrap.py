@@ -275,7 +275,7 @@ def after_func(keyword, scraping_done_event, results):
     global count
     global driver
     global start
-    driver.get_screenshot_as_file("screenshot.png")
+    # driver.get_screenshot_as_file("screenshot.png")
     driver.find_element(By.ID, 'twotabsearchtextbox').send_keys(keyword)
     search_button = driver.find_element(By.ID, 'nav-search-submit-button')
     search_button.click()
@@ -309,17 +309,15 @@ def after_func(keyword, scraping_done_event, results):
     if title.text in list_of_collections:
         collection_name = dbase[title.text]
         # Assuming 'count' is the field you want to update
-        filter_criteria = {}  # Provide a filter criteria based on your document structure
-
         # Update the 'count' field using $inc to increment the value
-        update_result = collection_name.update_one(filter_criteria, {"$inc": {"count": 1}})
+        currentCount = collection_name['count']
+        print("current count is:", currentCount)
+        collection_name.update_one({}, {"$inc": {'count': 1}})
+        print("count increased by 1")
 
-        if update_result.modified_count > 0:
-            logger.info("Collection exists, count incremented")
-            scraping_done_event.set()
-            return title.text
-        else:
-            logger.warning("Collection exists, but count not updated")
+        scraping_done_event.set()
+        return title.text
+        
     else:
         logger.info("Collection does not exist")
     count = 1
@@ -329,7 +327,7 @@ def after_func(keyword, scraping_done_event, results):
 
     driver.get(web)
     captcha_solver()
-    driver.get_screenshot_as_file("screenshot.png")
+    # driver.get_screenshot_as_file("screenshot.png")
     driver.implicitly_wait(5)
     count = 1
     temp = 0
@@ -372,7 +370,7 @@ def after_func(keyword, scraping_done_event, results):
         logger.error(f"Error in after_func while scraping reviews: {str(e)}")
 
     driver.quit()
-    logger.info(reviews)
+    # logger.info(reviews)
     end = time.time()
     logger.info(f"Total time: {end - start}")
 

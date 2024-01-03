@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import { Form, Button, Container } from "react-bootstrap";
 import logo from "./Images/Logo-NObg-NOtxt.png";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -74,7 +74,6 @@ function Search(props) {
         </Button>
       </Form>
 
-    
       {loading ? (
         <Loading />
       ) : productName ? (

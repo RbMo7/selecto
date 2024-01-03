@@ -18,8 +18,20 @@ class UserSerializer(serializers.Serializer):
     product_img = serializers.URLField()
     name = serializers.CharField()
     email = serializers.CharField()
+    profile_image = serializers.URLField()
     def to_representation(self, instance):
         return {
             'name': instance.get('name'),
             'email': instance.get('email'),
+            # 'profile_image': instance.get('profile_image', '')
         }
+    
+
+class TopCollectionSerializer(serializers.Serializer):
+    collection = serializers.CharField()
+    count = serializers.IntegerField()
+
+class TopCollectionsResponseSerializer(serializers.Serializer):
+    top_collections = TopCollectionSerializer(many=True)
+    def to_representation(self, instance):
+        return {'top_collections': instance['top_collections']}

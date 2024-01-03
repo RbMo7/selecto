@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
-from .serializers import ProductSerializer, UserSerializer
+from .serializers import ProductSerializer, UserSerializer, TopCollectionsResponseSerializer
 from .database import get_database
 import bcrypt
 from .nlp import process_nlp_collection
@@ -16,8 +16,6 @@ from bson import ObjectId
 # from .scraping import scraping_thread
 
 # Get the database
-
-
 
 def search_and_scrape(request):
     if request.method == 'POST':
@@ -40,7 +38,6 @@ def search_and_scrape(request):
 @api_view(['GET'])
 def get_products(request, collection_name):
     try:
-        print("yeta aayooooooooooooooooooooo")
         database_name='Reviews'
         dbase = get_database(database_name)
         # print("yeta ta aayo")
@@ -63,10 +60,10 @@ def nlp_view(request, product_name):
     try:
         # Call the existing NLP processing function
         print("printing collection in views:", product_name)
-        avg_negative, avg_neutral, avg_positive = process_nlp_collection(product_name)
+        avg_positive, avg_negative, avg_neutral = process_nlp_collection(product_name)
         summary = summarize(product_name)
 
-        nlp=[avg_negative, avg_neutral, avg_positive,summary]
+        nlp=[avg_positive, avg_negative, avg_neutral,summary]
         
         print (avg_negative)
         print (avg_neutral)
@@ -129,12 +126,15 @@ def register_user(request):
             hashed_password = bcrypt.hashpw(
                 password.encode('utf-8'), bcrypt.gensalt())
 
+            # Set a default image URL or binary data
+            default_image_url = 'C:\My Files\KU\4th sem\Project\selecto\frontend\src\Components\Images\defaultuser.png'
+            
             # Prepare the document to be inserted
             user_document = {
                 'name': name,
                 'email': email,
-                # Ensure to decode the hashed password
                 'password': hashed_password.decode('utf-8'),
+                'profile_image': default_image_url,  
             }
 
             # Insert the document into the 'userInfo' collection
@@ -193,6 +193,37 @@ def signin_user(request):
         return JsonResponse({'error': 'Internal server error'})
 
     return JsonResponse({'error': 'Invalid request method'})
+# Your utility function to get hot products
+def get_hot_products():
+    try:
+        database_name = 'Reviews'
+        dbase = get_database(database_name)
+        list_of_collection = dbase.list_collection_names()
+        collection_counts = []
+        
+        for collection_name in list_of_collection:
+            current_collection = dbase[collection_name]
+            res = current_collection.find_one()
+            count = res['count']
+            img = res['product_img']
+            collection_counts.append({'collection': collection_name,'product_img': img, 'count': count})
+
+        sorted_col = sorted(collection_counts, key=lambda x: x['count'], reverse=True)
+        top_5_collections = sorted_col[:5]
+
+        return {'top_collections': top_5_collections}
+
+    except Exception as e:
+        return {'error': str(e)}
+
+
+# Your DRF view for hot products
+@api_view(['GET'])
+def hot_products(request):
+    hot_products_data = get_hot_products()
+    serializer = TopCollectionsResponseSerializer(hot_products_data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 @api_view(['GET'])
 def get_user_details(request, user_id):
@@ -213,8 +244,40 @@ def get_user_details(request, user_id):
 
         # Serialize the data using UserSerializer
         serializer = UserSerializer(user)
-
-        return Response({'user': serializer.data})
+        hot_products_data = get_hot_products()
+        return Response({'user': serializer.data, 'hot_products': hot_products_data})
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
+
+
+@api_view(['PATCH'])
+def update_userdetails(request, user_id):
+    try:
+        print("Updating user details")
+        data = json.loads(request.body.decode('utf-8'))
+        user_data = data.get('updatedUserDetails')
+        print(user_data)
+
+        # Select the database and collection
+        database_name = 'Users'
+        dbase = get_database(database_name)
+        collection = dbase["userInfo"]
+
+        # Extract the updated user details from the request data
+        updated_user_details = {
+            'name': user_data.get('name'),
+            'email': user_data.get('email'),
+            # Add other fields as needed
+        }
+        print(updated_user_details)
+
+        # Update user details in the collection
+        collection.update_one({"_id": ObjectId(user_id)}, {"$set": updated_user_details})
+
+        return Response({'message': 'User details updated successfully'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
